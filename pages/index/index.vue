@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				href: 'https://uniapp.dcloud.io/component/README?id=uniui'
+				href: 'https://uniapp666666666666666666ponent/README?id=uniui'
 			}
 		},
 		methods: {
