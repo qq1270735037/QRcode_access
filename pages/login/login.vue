@@ -5,30 +5,42 @@
 登录功能
  -->
 <template>
-	<view class="content">
+	<view class="content" >
 		<!-- 图标 -->
 		<view class="login">
-			<image class="logo"  mode="widthFix"></image>
+			<image class="logo" src="../../static/login/door.png" mode="widthFix"></image>
 		</view>
 		<form name="from1">
 			<!-- 账号 -->
 			<view class="inputView">
-				<image class="nameImage" ></image>
+				<image class="nameImage" src="../../static/login/account.png"></image>
 
-				<input class="inputText" type="text" placeholder="请输入员工ID" value="user" v-model="userId"
-					@input="onInput" placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
+				<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="userId" @input="onInput"
+					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
 			</view>
+
 			<!-- 密码 -->
 			<view class="inputView">
-				<image class="keyImage" ></image>
+				<image class="keyImage" src="../../static/login/账号密码.png"></image>
 
 				<input class="inputText" maxlength="16" password="true" type="text" placeholder="请输入密码" value="password"
 					v-model="userPassword" @input="onInput"
 					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
 			</view>
+			
 		</form>
+		<!-- 选择身份框 -->
+		<view class="uni-title">请选择身份</view>
+		<view class="checkid">
+			<u-radio-group v-model="radiovalue1" placement="row" @change="groupChange" shape="circle">
+				<u-radio class="radioclass" size=20px  v-for="(item, index) in radiolist1" :key="index"
+					:label="item.name" :name="item.name">
+				</u-radio>
+			</u-radio-group>
+		</view>
+
 		<!-- 忘记密码和记住密码 -->
-		<view style="display: flex;flex-direction: row;margin-left: 14%;">
+		<view style="display: flex;flex-direction: row;margin-left: 14%">
 			<view class=" mui-input-row mui-checkbox ">
 				<checkbox-group @change="checkboxChange">
 					<checkbox id="chkRem" type="checkbox" :checked="rememberPassword"
@@ -37,19 +49,19 @@
 					</checkbox>
 				</checkbox-group>
 			</view>
+			<text class="register" @click="register_account">注册</text>
 			<text class="forget" @click="forget_password">忘记密码？</text>
 		</view>
 		<!-- 登录按钮 -->
 		<view class="loginBtnView">
 			<button class="loginBtn" @tap="lands" :disabled=disable_btn>登录</button>
 		</view>
-		<!-- 登陆成功 -->
-		<view>
-			<u-toast ref="uToast" />
-		</view>
 
-		<u-modal v-model="show_modal" :show-confirm-button=true content="请携带有效身份证件,前往管理员处修改密码" :show-title=false>
-		</u-modal>
+		
+		<!-- 登陆成功 -->
+
+
+
 	</view>
 
 </template>
@@ -60,12 +72,29 @@
 			return {
 				userId: '',
 				userPassword: '',
-
+				pwd2:'',
 				message: '',
 				rememberPassword: false,
 				show_modal: false,
 				disable_btn: true,
-				clear: 0
+				clear: 0,
+				// 基本案列数据
+				radiolist1: [{
+						name: '业主/租户',
+						disabled: false
+					},
+					{
+
+						name: '游客',
+						disabled: false
+					},
+					{
+						name: '管理员',
+						disabled: false
+					}
+				],
+				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
+				radiovalue1: '游客'
 			}
 		},
 		onLoad() {
@@ -87,6 +116,10 @@
 			}
 		},
 		methods: {
+			groupChange(n) {
+				console.log('groupChange', this.radiovalue1);
+			},
+
 			onInput(e) {
 				if (this.userId && this.userPassword) {
 					this.disable_btn = false
@@ -94,8 +127,31 @@
 					this.disable_btn = true
 				}
 			},
+			register_account(){
+				uni.showLoading({
+					title:'加载中'
+				})
+				setTimeout(function() {
+					uni.hideLoading();
+					//在起始页面跳转到test.vue页面并传递参数
+					uni.navigateTo({
+						url: '../register/register'
+					});
+				}, 500);
+			},
 			forget_password() {
-				this.show_modal = true;
+				uni.showModal({
+					title: '提示',
+					content: '请携带有效身份证件,前往管理员处修改密码',
+					showCancel:false,
+					success: function(res) {
+						if (res.confirm) {
+							console.log('用户点击确定');
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
 			},
 			showToast(Msg, Type) {
 				this.$refs.uToast.show({
@@ -108,17 +164,17 @@
 				uni.showLoading({
 					title: '加载中'
 				});
-				
-				setTimeout(function () {
+
+				setTimeout(function() {
 					uni.hideLoading();
 					//在起始页面跳转到test.vue页面并传递参数
 					uni.redirectTo({
 						url: '../index/index'
 					});
 				}, 2000);
-				
-				
-				
+
+
+
 			},
 			checkboxChange: function(e) {
 
@@ -139,6 +195,7 @@
 	.content {
 		text-align: center;
 		height: 400upx;
+		
 	}
 
 	.login {
@@ -181,8 +238,8 @@
 	.nameImage,
 	.keyImage {
 		margin-left: 15rpx;
-		margin-button: 3rpx;
-		margin-top: 25rpx;
+		margin-button: 0rpx;
+		margin-top: 30rpx;
 		width: 50rpx;
 		height: 50rpx;
 	}
@@ -231,9 +288,9 @@
 	}
 
 	.forget {
-		color: #9EC2EC;
-		margin-top: 20rpx;
-		margin-left: 50%;
+		color: #5b50ec;
+		margin-top: 10rpx;
+		margin-left: 10%;
 	}
 
 	/*按钮*/
@@ -252,4 +309,24 @@
 		background-color: #566cec;
 		color: aliceblue;
 	}
+
+	.checkid {
+		width: 90%;
+		height: 20rpx;
+		margin-top: 3%;
+		margin-bottom: 8%;
+		margin-left: 0%;
+		border-radius: 25rpx;
+	}
+
+	.radioclass {
+		margin-left: 10%;
+	}
+	
+	.register{
+		color: #5b50ec;
+		margin-top: 10rpx;
+		margin-left: 28%;
+	}
+	
 </style>
