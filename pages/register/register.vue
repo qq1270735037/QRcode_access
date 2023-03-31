@@ -46,8 +46,8 @@
 					<input placeholder-style="color: #a7a7a7" type="number" v-model="form.id" placeholder="请输入身份证号"
 						maxlength="18" @input="inputChange" style="color: #4a4545;" />
 				</view>
-				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
-
+				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+ -->
 			</view>
 
 			<!-- 注册按钮 -->
