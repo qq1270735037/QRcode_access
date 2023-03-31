@@ -46,8 +46,9 @@
 					<input placeholder-style="color: #a7a7a7" type="number" v-model="form.id" placeholder="请输入身份证号"
 						maxlength="18" @input="inputChange" style="color: #4a4545;" />
 				</view>
-				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
- -->
+				<view class="input-item">
+					
+				</view>
 			</view>
 
 			<!-- 注册按钮 -->
@@ -60,51 +61,6 @@
 	export default {
 		data() {
 			return {
-				show: true,
-				list: [{
-						value: 1,
-						label: '中国',
-						children: [{
-								value: 2,
-								label: '广东',
-								children: [{
-										value: 3,
-										label: '深圳'
-									},
-									{
-										value: 4,
-										label: '广州'
-									}
-								]
-							},
-							{
-								value: 5,
-								label: '广西',
-								children: [{
-										value: 6,
-										label: '南宁'
-									},
-									{
-										value: 7,
-										label: '桂林'
-									}
-								]
-							}
-						]
-					},
-					{
-						value: 8,
-						label: '美国',
-						children: [{
-							value: 9,
-							label: '纽约',
-							children: [{
-								value: 10,
-								label: '皇后街区'
-							}]
-						}]
-					}
-				],
 
 				form: {
 					username: '',
@@ -173,6 +129,7 @@
 				//显示密码
 				if (this.showPassword === true) {
 					this.passwordbtn = '../../static/register/close.png'
+		
 				}
 				//隐藏密码
 				if (false === this.showPassword) {
