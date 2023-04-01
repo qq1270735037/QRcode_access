@@ -56,7 +56,11 @@
 		<view class="loginBtnView">
 			<button class="loginBtn" @tap="lands" :disabled=disable_btn>登录</button>
 		</view>
-
+		
+		<view>
+			<u-toast ref="uToast"></u-toast>
+		</view>
+		
 		
 		<!-- 登陆成功 -->
 

@@ -26,7 +26,7 @@
 					<input placeholder-style="color: #a7a7a7" type="mobile" v-model="form.password" placeholder="请输入密码"
 						placeholder-class="input-empty" maxlength="20" :password="showPassword" @input="inputChange"
 						style="color: #4a4545;" />
-					<image :src="passwordbtn" style="padding-left:15rpx;width: 40rpx;height: 40rpx;"
+					<image :src="passwordbtn" style="padding-left:15rpx;width: 40rpx;height: 40rpx;margin-right: 40rpx;"
 						@click="changePassword"></image>
 				</view>
 				<!-- 确认密码-->
@@ -36,7 +36,8 @@
 					<input placeholder-style="color: #a7a7a7" type="mobile" v-model="form.confirmPassword"
 						placeholder="请再次确认密码" placeholder-class="input-empty" maxlength="20" :password="showPassword2"
 						@input="inputChange" style="color: #4a4545;" />
-					<image :src="passwordbtn2" style="padding-left:15rpx;width: 40rpx;height: 40rpx;"
+					<image :src="passwordbtn2"
+						style="padding-left:15rpx;margin-right: 40rpx;  width: 40rpx;height: 40rpx;"
 						@click="changePassword2"></image>
 				</view>
 				<!-- 身份证 -->
@@ -46,9 +47,21 @@
 					<input placeholder-style="color: #a7a7a7" type="number" v-model="form.id" placeholder="请输入身份证号"
 						maxlength="18" @input="inputChange" style="color: #4a4545;" />
 				</view>
-				<view class="input-item">
-					
+				<view>
+					<u-cell-group>
+						<u-cell class="select_item" title="请选择身份" :value="identify_type" :isLink="true"
+							arrow-direction="right" border:false @click="identify_change" ></u-cell>
+					</u-cell-group>
 				</view>
+				<view>
+					
+					<u-picker :show="pick_show" :columns="columns" @cancel="cancel" @confirm="confirm"  @change='changeHandler' ></u-picker>
+				</view>
+
+				<view>
+					<u-toast ref="uToast" />
+				</view>
+
 			</view>
 
 			<!-- 注册按钮 -->
@@ -61,7 +74,11 @@
 	export default {
 		data() {
 			return {
-
+				
+				columns: [
+					['访客', '业主/租户', '管理员']
+				],
+				identify_type: "",
 				form: {
 					username: '',
 					password: '',
@@ -77,17 +94,7 @@
 				passwordbtn2: '../../static/register/close.png',
 
 				pick_show: false,
-				columns: [
-					['中国', '美国', '1', '454'],
-					['深圳', '厦门', '上海', '拉萨']
-				],
-				columnData: [
-					['深圳', '厦门', '上海', '666'],
-					['得州', '华盛顿', '纽约', '阿拉斯加'],
-					['111'],
-					['1'],
-				]
-
+				
 			}
 		},
 		onLoad() {
@@ -101,7 +108,7 @@
 		},
 		methods: {
 			inputChange() {
-				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id) {
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id && this.identify_type) {
 					this.logining = false
 				} else {
 					this.logining = true
@@ -118,9 +125,21 @@
 				})
 			},
 
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+					
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
+			},
 			toRegist() {
 				if (this.form.password !== this.form.confirmPassword) {
 					console.log("error")
+					this.showToast("两次密码不一致请重试",'error')
+					this.form.confirmPassword=""
+					this.form.password=""
+					
 				}
 			},
 			changePassword() {
@@ -129,7 +148,7 @@
 				//显示密码
 				if (this.showPassword === true) {
 					this.passwordbtn = '../../static/register/close.png'
-		
+
 				}
 				//隐藏密码
 				if (false === this.showPassword) {
@@ -149,30 +168,35 @@
 					this.passwordbtn2 = '../../static/register/open.png'
 				}
 			},
-
+			
+			//模拟请求身份类型
 			changeHandler(e) {
-				const {
-					columnIndex,
-					value,
-					values, // values为当前变化列的数组内容
-					index,
-					// 微信小程序无法将picker实例传出来，只能通过ref操作
-					picker = this.$refs.uPicker
-				} = e
-				// 当第一列值发生变化时，变化第二列(后一列)对应的选项
-				if (columnIndex === 0) {
-					// picker为选择器this实例，变化第二列对应的选项
-					picker.setColumnValues(1, this.columnData[index])
-				}
+				
 			},
 			// 回调参数为包含columnIndex、value、values
 			confirm(e) {
-				console.log('confirm', e)
+				console.log('confirm', '确定:',e.indexs[0])
+				this.identify_type=e.value[0]
 				this.pick_show = false
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id&&this.identify_type) {
+					this.logining = false
+				} else {
+					this.logining = true
+				}
 			},
 			cancel(e) {
-				console.log('cancel', e)
+				console.log('cancel', '取消')
+				this.identify_type=''
 				this.pick_show = false
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id&&this.identify_type) {
+					this.logining = false
+				} else {
+					this.logining = true
+				}
+			},
+			identify_change() {
+				console.log('change')
+				this.pick_show = true
 			},
 
 		},
@@ -181,6 +205,19 @@
 </script>
 
 <style lang='scss'>
+	.u-page {
+			padding: 0;
+		}
+	
+		.u-cell-icon {
+			width: 36rpx;
+			height: 36rpx;
+			margin-right: 8rpx;
+		}
+	
+		.u-cell-group__title__text {
+			font-weight: bold;
+		}
 	page {
 		background: #fff;
 		width: 100%;
@@ -292,6 +329,22 @@
 		padding: 0 60upx;
 	}
 
+	.select_item {
+		justify-content: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+		border: 1px solid #eee;
+		border-radius: 40upx;
+		justify-content: center;
+		margin-bottom: 50upx;
+		-moz-box-shadow: 0 0 10px #06c;
+		-webkit-box-shadow: 0 0 10px #b9b9b9;
+		box-shadow: 0 0 10px #cdcdcd;
+
+		/* &:last-child {
+			margin-bottom: 0;
+		} */
+	}
+
 	.input-item {
 		display: flex;
 		flex-direction: row;
@@ -347,10 +400,8 @@
 		-moz-box-shadow: 0 0 10px #06c;
 		-webkit-box-shadow: 0 0 10px #b9b9b9;
 		box-shadow: 0 0 10px #cdcdcd;
+		border-radius: 100px;
 
-		&:after {
-			border-radius: 100px;
-		}
 	}
 
 	.forget-section {
