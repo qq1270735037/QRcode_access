@@ -455,7 +455,7 @@
 		background-color: #ffffff;
 		text-align: center;
 		font-size: 25upx;
-		border-bottom: 1px solid #EEEEEE;
+		border-bottom: 1px solid #ffffff;
 
 	}
 

@@ -5,7 +5,7 @@
 登录功能
  -->
 <template>
-	<view class="content" >
+	<view class="content">
 		<!-- 图标 -->
 		<view class="login">
 			<image class="logo" src="../../static/login/door.png" mode="widthFix"></image>
@@ -27,13 +27,13 @@
 					v-model="userPassword" @input="onInput"
 					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
 			</view>
-			
+
 		</form>
 		<!-- 选择身份框 -->
 		<view class="uni-title">请选择身份</view>
 		<view class="checkid">
 			<u-radio-group v-model="radiovalue1" placement="row" @change="groupChange" shape="circle">
-				<u-radio class="radioclass" size=20px  v-for="(item, index) in radiolist1" :key="index"
+				<u-radio class="radioclass" size=20px v-for="(item, index) in radiolist1" :key="index"
 					:label="item.name" :name="item.name">
 				</u-radio>
 			</u-radio-group>
@@ -56,12 +56,12 @@
 		<view class="loginBtnView">
 			<button class="loginBtn" @tap="lands" :disabled=disable_btn>登录</button>
 		</view>
-		
+
 		<view>
 			<u-toast ref="uToast"></u-toast>
 		</view>
-		
-		
+
+
 		<!-- 登陆成功 -->
 
 
@@ -76,7 +76,7 @@
 			return {
 				userId: '',
 				userPassword: '',
-				pwd2:'',
+				pwd2: '',
 				message: '',
 				rememberPassword: false,
 				show_modal: false,
@@ -131,9 +131,9 @@
 					this.disable_btn = true
 				}
 			},
-			register_account(){
+			register_account() {
 				uni.showLoading({
-					title:'加载中'
+					title: '加载中'
 				})
 				setTimeout(function() {
 					uni.hideLoading();
@@ -147,7 +147,7 @@
 				uni.showModal({
 					title: '提示',
 					content: '请携带有效身份证件,前往管理员处修改密码',
-					showCancel:false,
+					showCancel: false,
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
@@ -171,12 +171,13 @@
 
 				setTimeout(function() {
 					uni.hideLoading();
-					//在起始页面跳转到test.vue页面并传递参数
-					uni.redirectTo({
-						url: '../index/index'
-					});
-				}, 2000);
+					在起始页面跳转到test.vue页面并传递参数
+					
 
+				}, 2000);
+				uni.switchTab({
+					url: '../home/home'
+				});
 
 
 			},
@@ -199,7 +200,7 @@
 	.content {
 		text-align: center;
 		height: 400upx;
-		
+
 	}
 
 	.login {
@@ -326,11 +327,10 @@
 	.radioclass {
 		margin-left: 10%;
 	}
-	
-	.register{
+
+	.register {
 		color: #5b50ec;
 		margin-top: 10rpx;
 		margin-left: 28%;
 	}
-	
 </style>
