@@ -2,8 +2,8 @@
 	
 	<view >
 		
-		<button>222222222222222222222</button>
-		<tabBar :current="1"></tabBar>
+		<button>44444444444444444</button>
+		<tabBar :current="3"></tabBar>
 	</view>
 </template>
 

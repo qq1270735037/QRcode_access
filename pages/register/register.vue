@@ -3,7 +3,11 @@
 
 		<view class="wrapper">
 			<view>
-				<u-notice-bar :text="text1" mode="closable" speed="50" url="/pages/componentsB/tag/tag"></u-notice-bar>
+
+				<uni-notice-bar show-icon scrollable
+					:text="text1"
+					 show-close/>
+			
 			</view>
 			<view class="welcome">
 				<image mode="widthFix" src="../../static/login/door.png" class="logo"></image>
@@ -50,12 +54,13 @@
 				<view>
 					<u-cell-group>
 						<u-cell class="select_item" title="请选择身份" :value="identify_type" :isLink="true"
-							arrow-direction="right" border:false @click="identify_change" ></u-cell>
+							arrow-direction="right" border:false @click="identify_change"></u-cell>
 					</u-cell-group>
 				</view>
 				<view>
-					
-					<u-picker :show="pick_show" :columns="columns" @cancel="cancel" @confirm="confirm"  @change='changeHandler' ></u-picker>
+
+					<u-picker :show="pick_show" :columns="columns" @cancel="cancel" @confirm="confirm"
+						@change='changeHandler'></u-picker>
 				</view>
 
 				<view>
@@ -74,7 +79,7 @@
 	export default {
 		data() {
 			return {
-				
+
 				columns: [
 					['访客', '业主/租户', '管理员']
 				],
@@ -94,7 +99,7 @@
 				passwordbtn2: '../../static/register/close.png',
 
 				pick_show: false,
-				
+
 			}
 		},
 		onLoad() {
@@ -108,7 +113,8 @@
 		},
 		methods: {
 			inputChange() {
-				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id && this.identify_type) {
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id && this
+					.identify_type) {
 					this.logining = false
 				} else {
 					this.logining = true
@@ -129,17 +135,17 @@
 				this.$refs.uToast.show({
 					message: Msg,
 					type: Type,
-					
+
 					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
 				})
 			},
 			toRegist() {
 				if (this.form.password !== this.form.confirmPassword) {
 					console.log("error")
-					this.showToast("两次密码不一致请重试",'error')
-					this.form.confirmPassword=""
-					this.form.password=""
-					
+					this.showToast("两次密码不一致请重试", 'error')
+					this.form.confirmPassword = ""
+					this.form.password = ""
+
 				}
 			},
 			changePassword() {
@@ -168,17 +174,18 @@
 					this.passwordbtn2 = '../../static/register/open.png'
 				}
 			},
-			
+
 			//模拟请求身份类型
 			changeHandler(e) {
-				
+
 			},
 			// 回调参数为包含columnIndex、value、values
 			confirm(e) {
-				console.log('confirm', '确定:',e.indexs[0])
-				this.identify_type=e.value[0]
+				console.log('confirm', '确定:', e.indexs[0])
+				this.identify_type = e.value[0]
 				this.pick_show = false
-				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id&&this.identify_type) {
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id && this
+					.identify_type) {
 					this.logining = false
 				} else {
 					this.logining = true
@@ -186,9 +193,10 @@
 			},
 			cancel(e) {
 				console.log('cancel', '取消')
-				this.identify_type=''
+				this.identify_type = ''
 				this.pick_show = false
-				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id&&this.identify_type) {
+				if (this.form.username && this.form.password && this.form.confirmPassword && this.form.id && this
+					.identify_type) {
 					this.logining = false
 				} else {
 					this.logining = true
@@ -206,18 +214,19 @@
 
 <style lang='scss'>
 	.u-page {
-			padding: 0;
-		}
-	
-		.u-cell-icon {
-			width: 36rpx;
-			height: 36rpx;
-			margin-right: 8rpx;
-		}
-	
-		.u-cell-group__title__text {
-			font-weight: bold;
-		}
+		padding: 0;
+	}
+
+	.u-cell-icon {
+		width: 36rpx;
+		height: 36rpx;
+		margin-right: 8rpx;
+	}
+
+	.u-cell-group__title__text {
+		font-weight: bold;
+	}
+
 	page {
 		background: #fff;
 		width: 100%;

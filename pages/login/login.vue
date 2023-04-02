@@ -21,7 +21,7 @@
 
 			<!-- 密码 -->
 			<view class="inputView">
-				<image class="keyImage" src="../../static/login/账号密码.png"></image>
+				<image class="keyImage" src="../../static/login/pwd.png"></image>
 
 				<input class="inputText" maxlength="16" password="true" type="text" placeholder="请输入密码" value="password"
 					v-model="userPassword" @input="onInput"
@@ -33,7 +33,7 @@
 		<view class="uni-title">请选择身份</view>
 		<view class="checkid">
 			<u-radio-group v-model="radiovalue1" placement="row" @change="groupChange" shape="circle">
-				<u-radio class="radioclass" size=20px v-for="(item, index) in radiolist1" :key="index"
+				<u-radio class="radioclass" size=40upx labelSize=25upx v-for="(item, index) in radiolist1" :key="index"
 					:label="item.name" :name="item.name">
 				</u-radio>
 			</u-radio-group>
@@ -171,13 +171,13 @@
 
 				setTimeout(function() {
 					uni.hideLoading();
-					在起始页面跳转到test.vue页面并传递参数
-					
+					//在起始页面跳转到test.vue页面并传递参数
+					uni.switchTab({
+						url: '../home/home'
+					});
 
 				}, 2000);
-				uni.switchTab({
-					url: '../home/home'
-				});
+				
 
 
 			},
@@ -325,7 +325,7 @@
 	}
 
 	.radioclass {
-		margin-left: 10%;
+		margin-left: 13%;
 	}
 
 	.register {

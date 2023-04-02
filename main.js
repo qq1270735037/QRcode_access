@@ -13,7 +13,7 @@ Vue.use(uView)
 uni.$u.config.unit = 'rpx'
 //引入自定义的tabBar组件
 import tabBar from "components/tabBar/tabBar.vue"
-Vue.component('tab-bar', tabBar)//使用tabBar组件
+Vue.component('tabBar', tabBar)//使用tabBar组件
 const app = new Vue({
     ...App
 })
