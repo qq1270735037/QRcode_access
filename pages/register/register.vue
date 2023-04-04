@@ -213,28 +213,10 @@
 </script>
 
 <style lang='scss'>
-	.u-page {
-		padding: 0;
-	}
 
-	.u-cell-icon {
-		width: 36rpx;
-		height: 36rpx;
-		margin-right: 8rpx;
-	}
-
-	.u-cell-group__title__text {
-		font-weight: bold;
-	}
-
-	page {
-		background: #fff;
-		width: 100%;
-		height: 100%;
-	}
 
 	.container {
-		padding-top: 20px;
+		padding-top: 20rpx;
 		position: relative;
 		overflow: hidden;
 		/* background: url(../../static/images/public/bg.png); */
@@ -247,75 +229,21 @@
 	.wrapper {
 		position: relative;
 		z-index: 90;
-		padding-bottom: 40upx;
+		padding-bottom: 40rpx;
 	}
 
-	.back-btn {
-		position: absolute;
-		left: 40upx;
-		z-index: 9999;
-		padding-top: var(--status-bar-height);
-		top: 40upx;
-		font-size: 30upx;
-		color: #000000;
-	}
 
-	.left-top-sign {
-		font-size: 120upx;
-		color: #EEEEEE;
-		position: relative;
-		left: -16upx;
-	}
-
-	.right-top-sign {
-		position: absolute;
-		top: 80upx;
-		right: -30upx;
-		z-index: 95;
-
-		&:before,
-		&:after {
-			display: block;
-			content: "";
-			width: 400upx;
-			height: 80upx;
-			background: #b4f3e2;
-		}
-
-		&:before {
-			transform: rotate(50deg);
-			border-radius: 0 50px 0 0;
-		}
-
-		&:after {
-			position: absolute;
-			right: -198upx;
-			top: 0;
-			transform: rotate(-50deg);
-			border-radius: 50px 0 0 0;
-			/* background: pink; */
-		}
-	}
-
-	.left-bottom-sign {
-		position: absolute;
-		left: -270upx;
-		bottom: -320upx;
-		border: 100upx solid #d0d1fd;
-		border-radius: 50%;
-		padding: 180upx;
-	}
 
 	.welcome {
 
 		text-align: center;
 		position: relative;
-		padding-left: 40upx;
-		padding-bottom: 20upx;
-		padding-top: 20upx;
+		padding-left: 40rpx;
+		padding-bottom: 20rpx;
+		padding-top: 20rpx;
 
 		.logo {
-			width: 100upx;
+			width: 100rpx;
 		}
 
 		.txt {
@@ -323,35 +251,33 @@
 			flex-direction: column;
 			text-align: center;
 			color: #000000;
-			padding-left: 20upx;
-			padding-bottom: 40upx;
-			font-size: 26upx;
+			padding-left: 20rpx;
+			padding-bottom: 40rpx;
+			font-size: 26rpx;
 
 			.b {
-				font-size: 40upx;
+				font-size: 40rpx;
 				font-weight: bold;
 			}
 		}
 	}
 
 	.input-content {
-		padding: 0 60upx;
+		padding: 0 60rpx;
 	}
 
 	.select_item {
 		justify-content: center;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-		border: 1px solid #eee;
-		border-radius: 40upx;
+		border-bottom: 1rpx solid rgba(255, 255, 255, 0.6);
+		border: 1rpx solid #eee;
+		border-radius: 40rpx;
 		justify-content: center;
-		margin-bottom: 50upx;
-		-moz-box-shadow: 0 0 10px #06c;
-		-webkit-box-shadow: 0 0 10px #b9b9b9;
-		box-shadow: 0 0 10px #cdcdcd;
+		margin-bottom: 50rpx;
+		-moz-box-shadow: 0 0 10rpx #06c;
+		-webkit-box-shadow: 0 0 10rpx #b9b9b9;
+		box-shadow: 0 0 10rpx #cdcdcd;
 
-		/* &:last-child {
-			margin-bottom: 0;
-		} */
+	
 	}
 
 	.input-item {
@@ -359,17 +285,16 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0 10upx;
-		height: 80upx;
-		line-height: 80upx;
-		margin-bottom: 50upx;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-		border: 1px solid #eee;
-		border-radius: 40upx;
-		-moz-box-shadow: 0 0 10px #06c;
-		-webkit-box-shadow: 0 0 10px #b9b9b9;
-		box-shadow: 0 0 10px #cdcdcd;
-
+		padding: 0 10rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		margin-bottom: 50rpx;
+		border-bottom: 1rpx solid rgba(255, 255, 255, 0.6);
+		border: 1rpx solid #eee;
+		border-radius: 40rpx;
+		-moz-box-shadow: 0 0 10rpx #06c;
+		-webkit-box-shadow: 0 0 10rpx #b9b9b9;
+		box-shadow: 0 0 10rpx #cdcdcd;
 		&:last-child {
 			margin-bottom: 0;
 		}
@@ -391,11 +316,6 @@
 		}
 	}
 
-	.link {
-		display: flex;
-		padding: 30upx 60upx;
-		color: #ffffff;
-	}
 
 	.confirm-btn {
 		width: 630upx;
@@ -413,100 +333,6 @@
 
 	}
 
-	.forget-section {
-		font-size: 28upx;
-		color: #fff;
-		text-align: center;
-		margin-top: 40upx;
-	}
 
-	.register-section {
-		position: absolute;
-		left: 0;
-		bottom: 50upx;
-		width: 100%;
-		font-size: 28upx;
-		color: #4E46D2;
-		text-align: center;
 
-		text {
-			color: #ffffff;
-			margin-left: 10upx;
-		}
-	}
-
-	.chat {
-		position: fixed;
-		right: 30upx;
-		font-size: 28upx;
-		color: #000000;
-		top: 85upx;
-		width: 200upx;
-		height: 100upx;
-		z-index: 999;
-		text-align: right;
-	}
-
-	.banben {
-		justify-content: center; //水平居中
-		font-size: 20upx;
-		text-align: center;
-		margin-top: 50upx;
-	}
-
-	.logintab {}
-
-	.login {
-		width: 280upx;
-		height: 55upx;
-		margin-left: 200upx;
-		color: #b3b3b3;
-		background-color: #ffffff;
-		text-align: center;
-		font-size: 25upx;
-		border-bottom: 1px solid #ffffff;
-
-	}
-
-	.register {
-		width: 280upx;
-		height: 55upx;
-		margin-right: 200upx;
-		color: #000000;
-		background-color: #ffffff;
-		text-align: center;
-		font-size: 30upx;
-		decoration: underline;
-		font-weight: bold;
-		border-bottom: 1px solid #ff8945;
-	}
-
-	.cu-form-group {
-		background-color: #ffffff;
-		padding: 1upx 15upx;
-		display: flex;
-		align-items: center;
-		min-height: 52upx;
-		justify-content: space-between;
-		margin-bottom: 28upx;
-	}
-
-	/* .uni-input-placeholder{
-		color: #4a4545!important;
-	} */
-	.uni-input-placeholder {
-		color: #bdbdbd;
-	}
-
-	.uni-input-input {
-		.uni-input-input {
-			height: 100%;
-			background: #ffffff !important;
-			color: #000000 !important;
-		}
-	}
-
-	.uni-input-wrapper {
-		color: #4a4545 !important;
-	}
 </style>

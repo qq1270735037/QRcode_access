@@ -30,17 +30,17 @@
 				list: [{
 						margin: "",
 						class: "image_item",
-						src: "../../static/register/open.png",
-						src2: "https://cdn.uviewui.com/uview/common/bell.png",
-						text: '首页1',
+						src2: "../../static/tabbar/home.png",
+						src: "../../static/tabbar/home-fill.png",
+						text: '首页',
 						customIcon: false,
 						pagePath: "pages/home/home"
 					},
 					{
 						margin: "",
 						class: "image_item",
-						src: "../../static/register/open.png",
-						src2: "https://cdn.uviewui.com/uview/common/bell.png",
+						src2: "../../static/register/open.png",
+						src: "https://cdn.uviewui.com/uview/common/bell.png",
 						text: '首页2',
 						customIcon: false,
 						pagePath: "pages/index/index"
@@ -48,8 +48,8 @@
 					{
 						margin: "txt-item",
 						class: "image_item_big",
-						src: "../../static/register/open.png",
-						src2: "https://cdn.uviewui.com/uview/common/bell.png",
+						src2: "../../static/tabbar/scan.png",
+						src: "../../static/tabbar/scan.png",
 						text: '首页3',
 						customIcon: false,
 						pagePath: "pages/index1/index"
@@ -57,8 +57,9 @@
 					{
 						margin: "",
 						class: "image_item",
-						src: "../../static/register/open.png",
-						src2: "https://cdn.uviewui.com/uview/common/bell.png",
+						src2: "../../static/tabbar/fix.png",
+						src: "../../static/tabbar/fix-fill.png",
+						
 						text: '首页4',
 						customIcon: false,
 						pagePath: "pages/index2/index"
@@ -66,8 +67,8 @@
 					{
 						margin: "",
 						class: "image_item",
-						src: "../../static/register/open.png",
-						src2: "https://cdn.uviewui.com/uview/common/bell.png",
+						src2: "../../static/tabbar/my.png",
+						src: "../../static/tabbar/my-fill.png",
 						text: '首页5',
 						customIcon: false,
 						pagePath: "pages/index3/index"
@@ -92,10 +93,20 @@
 			change1(name) {
 
 				console.log("name:", name)
-				uni.switchTab({
-					url: '/' + this.list[name].pagePath,
-				})
-
+				if(name!==2){
+					uni.switchTab({
+						url: '/' + this.list[name].pagePath,
+					})
+				}
+				else{
+					uni.scanCode({
+						success: function (res) {
+							
+							console.log('条码类型：' + res.scanType);
+							console.log('条码内容：' + res.result);
+						}
+					});
+				}
 
 			},
 		},

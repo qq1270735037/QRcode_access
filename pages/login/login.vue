@@ -13,7 +13,7 @@
 		<form name="from1">
 			<!-- 账号 -->
 			<view class="inputView">
-				<image class="nameImage" src="../../static/login/account.png"></image>
+				<image class="keyImage" src="../../static/login/account.png"></image>
 
 				<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="userId" @input="onInput"
 					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
@@ -165,12 +165,14 @@
 			},
 			lands() {
 				uni.setStorageSync('linkAddress', 'http://127.0.0.1:8001/');
+				this.disable_btn = true
 				uni.showLoading({
 					title: '加载中'
 				});
 
 				setTimeout(function() {
 					uni.hideLoading();
+					
 					//在起始页面跳转到test.vue页面并传递参数
 					uni.switchTab({
 						url: '../home/home'
@@ -219,13 +221,7 @@
 		margin-bottom: 50rpx;
 	}
 
-	.login-from {
-		margin-top: 30%;
 
-		flex: auto;
-		height: 100%;
-		width: 100%;
-	}
 
 	.inputView {
 
@@ -240,7 +236,7 @@
 		align-items: center
 	}
 
-	.nameImage,
+	
 	.keyImage {
 		margin-left: 15rpx;
 		margin-button: 0rpx;
@@ -257,34 +253,22 @@
 		float: right;
 		text-align: left;
 		margin-right: 22rpx;
-		margin-top: 40rpx;
+		margin-top: 30rpx;
 		color: #0c0c0c;
-		font-size: 26rpx;
+		font-size: 38rpx;
 		height: 100%;
 	}
 
-	.loginLab {
-		margin: 15rpx 15rpx 15rpx 10rpx;
-		color: #f9faf9;
-		font-size: 18rpx;
-	}
 
-	.line {
-		width: 100%;
-		height: 1rpx;
-		background-color: #ffffff;
-		margin-top: 1rpx;
-	}
+
+
 
 	/* 记住密码 */
 	.mui-checkbox input[type='checkbox']:checked:before {
 		color: #00bbb1;
 	}
 
-	.RememberPass {
-		color: #adadad;
-		margin-top: 5rpx;
-	}
+
 
 	.RememberCheck {
 		margin-left: -50%;
