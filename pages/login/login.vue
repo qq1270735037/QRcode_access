@@ -169,6 +169,14 @@
 				uni.showLoading({
 					title: '加载中'
 				});
+				uni.request({
+					url:'http://127.0.0.1:8888/',
+					success: res =>{
+						
+						console.log(res);
+						
+						}
+				})
 
 				setTimeout(function() {
 					uni.hideLoading();
