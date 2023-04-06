@@ -50,7 +50,7 @@
 						class: "image_item_big",
 						src2: "../../static/tabbar/scan.png",
 						src: "../../static/tabbar/scan.png",
-						text: '首页3',
+						text: '扫一扫',
 						customIcon: false,
 						pagePath: "pages/index1/index"
 					},
@@ -60,7 +60,7 @@
 						src2: "../../static/tabbar/fix.png",
 						src: "../../static/tabbar/fix-fill.png",
 						
-						text: '首页4',
+						text: '报修',
 						customIcon: false,
 						pagePath: "pages/index2/index"
 					},
@@ -69,7 +69,7 @@
 						class: "image_item",
 						src2: "../../static/tabbar/my.png",
 						src: "../../static/tabbar/my-fill.png",
-						text: '首页5',
+						text: '我的',
 						customIcon: false,
 						pagePath: "pages/index3/index"
 					}

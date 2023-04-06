@@ -9,7 +9,6 @@
 				<swiper-item v-for="(item,index) in image_list" :key="index" >
 					<image class="swiper-image" :src="item.src"></image>
 				</swiper-item>
-				
 			</swiper>
 		</view>
 		<tabBar :current="0"></tabBar>

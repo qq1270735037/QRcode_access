@@ -10,7 +10,7 @@
 		<view class="login">
 			<image class="logo" src="../../static/login/door.png" mode="widthFix"></image>
 		</view>
-		<form name="from1">
+		<form name="from1" >
 			<!-- 账号 -->
 			<view class="inputView">
 				<image class="keyImage" src="../../static/login/account.png"></image>
