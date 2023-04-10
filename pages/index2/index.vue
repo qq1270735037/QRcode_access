@@ -3,9 +3,9 @@
 	<view>
 		<view>
 			<u-row>
-				<u-col span="2.8">
+				<u-col >
 					<view>
-						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">个人信息:</text>
+						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">个人信息: {{aaa}}</text>
 					</view>
 				</u-col>
 				<u-col>
@@ -49,7 +49,8 @@
 					<u-upload class="upload" :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1"
 						multiple :maxCount="5" :previewFullImage="true" width="170" height="170">
 						<image src="../../static/fix/upload.png" mode="widthFix"
-							style="width: 170upx;height: 170upx; border-radius: 30px; background-color: #f5f5f5;"></image>
+							style="width: 170upx;height: 170upx; border-radius: 30px; background-color: #f5f5f5;">
+						</image>
 					</u-upload>
 				</view>
 			</scroll-view>
@@ -57,6 +58,8 @@
 
 
 		</view>
+		<button @click="submit">提交</button>
+		<button @click="refresh">刷新</button>
 		<view style="margin-top: 500upx;">
 			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
 		</view>
@@ -78,60 +81,61 @@
 	export default {
 		data() {
 			return {
-
+				aaa:"6666666666666666",
+				//设置图片event
+				event_image: [],
 				name: '',
 				phone: '',
-				fileList1: [{
-					url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-				}],
+				fileList1: [],
 				image_list: [{
-						src: "../../static/home/ad3.jpg",
-						name: "1",
+						src: "../../static/fix/air_conditioner.png",
+						name: "空调",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "2",
+						src: "../../static/fix/water_pump.png",
+						name: "水泵",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "3",
+						src: "../../static/fix/door.png",
+						name: "大门",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "4",
+						src: "../../static/fix/window.png",
+						name: "窗户",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "5",
+						src: "../../static/fix/Water.png",
+						name: "饮水机",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "6",
+						src: "../../static/fix/elevator.png",
+						name: "电梯",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "7",
+						src: "../../static/fix/stairway.png",
+						name: "楼梯",
 						class: "grid-item-box",
 						select: 0
 					},
 					{
-						src: "../../static/home/ad3.jpg",
-						name: "8",
+						src: "../../static/fix/other.png",
+						name: "其他",
 						class: "grid-item-box",
 						select: 0
 					},
+
 				],
 
 
@@ -144,10 +148,10 @@
 					index
 				} = e.detail
 
-				// uni.showToast({
-				// 	title: `点击第${index+1}个宫格`,
-				// 	icon: 'none'
-				// })
+				uni.showToast({
+					title: `点击第${index+1}个宫格`,
+					icon: 'none'
+				})
 				if (this.image_list[index].select === 0) {
 					this.image_list[index].class = "grid-item-color",
 						this.image_list[index].select = 1
@@ -180,10 +184,10 @@
 			// 删除图片
 			deletePic(event) {
 				this[`fileList${event.name}`].splice(event.index, 1)
+				this.event_image.splice(event.index, 1)
 			},
 			// 新增图片
 			async afterRead(event) {
-				// 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
 				let lists = [].concat(event.file)
 				let fileListLen = this[`fileList${event.name}`].length
 				lists.map((item) => {
@@ -193,19 +197,35 @@
 						message: '上传中'
 					})
 				})
-
+				// console.log("this[`fileList${event.name}`]",this[`fileList${event.name}`])
 				for (let i = 0; i < lists.length; i++) {
-					const result = await this.uploadFilePromise(lists[i].url)
-					console.log("result", lists[i].url)
+					// const result = await this.uploadFilePromise(lists[i].url)
 					let item = this[`fileList${event.name}`][fileListLen]
-					console.log("item", item)
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
 						status: 'success',
 						message: '',
-						url: result
+
 					}))
 					fileListLen++
 				}
+				for (let i = 0; i < fileListLen; i++) {
+					let item = this[`fileList${event.name}`]
+					this.event_image[i] = item[i].url
+				}
+				//console.log("this.event_image",this.event_image)
+			},
+			async submit() {
+				let len = this.event_image.length
+				for (let i = 0; i < len; i++) {
+					var result = await this.uploadFilePromise(this.event_image[i])
+					
+				}
+				
+			},
+			refresh() {
+				uni.reLaunch({
+					url: '/pages/index2/index'
+				})
 			},
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
@@ -214,16 +234,25 @@
 						filePath: url,
 						name: 'file',
 						formData: {
-							user: 'test'
+							// user: 'test'
 						},
+						
 						success: (res) => {
-							setTimeout(() => {
-								resolve(res.data.data)
-							}, 1000)
-						}
+
+							console.log("成功", res);
+
+
+						},
+						fail: (res) => {
+
+							console.warn("失败", res);
+							
+
+						},
 					});
 				})
 			},
+
 
 		}
 	}
@@ -257,8 +286,8 @@
 	}
 
 	.image {
-		width: 80px;
-		height: 80px;
+		width: 40px;
+		height: 40px;
 
 	}
 
@@ -310,7 +339,7 @@
 	.upload {
 		padding-top: 15upx;
 		width: 100%;
-		height: 200px;
+		height: 150px;
 		margin-left: 20upx;
 		/* 		background-color:#fafafa  ; */
 	}

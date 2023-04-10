@@ -94,7 +94,7 @@
 
 				console.log("name:", name)
 				if(name!==2){
-					uni.switchTab({
+					uni.reLaunch({
 						url: '/' + this.list[name].pagePath,
 					})
 				}
