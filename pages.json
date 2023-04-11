@@ -22,14 +22,14 @@
 		{
 			"path": "pages/home/home",
 			"style": {
-				"enablePullDownRefresh":true,//开启下拉刷新
+				"enablePullDownRefresh": true, //开启下拉刷新
 				"navigationBarTitleText": "码上禁"
 				// "app-plus": {"titleNView": false}
 			}
-			
-			
 
-			
+
+
+
 		},
 
 		{
@@ -43,24 +43,35 @@
 		{
 			"path": "pages/index1/index",
 			"style": {
-				"title-icon":"../../static/tabbar/fix-fill.png",
+				"title-icon": "../../static/tabbar/fix-fill.png",
 				"navigationBarTitleText": "码上禁"
 				// "app-plus": {"titleNView": false}
+
 			}
 		},
 
 		{
 			"path": "pages/index2/index",
 			"style": {
-				"navigationBarTitleText": "码上禁"
-				// "app-plus": {"titleNView": false}
+				"navigationBarTitleText": "码上禁",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "&#xe8aa;",
+							"fontSrc": "/static/fix/refresh/iconfont.ttf",
+							"fontSize": "25",
+							"float": "right"
+							
+						}]
+					}
+				}
 			}
 		},
 
 		{
 			"path": "pages/index3/index",
 			"style": {
-				
+
 				"navigationBarTitleText": "码上禁"
 				// "app-plus": {"titleNView": false}
 			}

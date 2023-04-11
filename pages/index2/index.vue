@@ -3,12 +3,12 @@
 	<view>
 		<view>
 			<u-row>
-				<u-col >
+				<u-col span="3">
 					<view>
-						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">个人信息: {{aaa}}</text>
+						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">个人信息: </text>
 					</view>
 				</u-col>
-				<u-col>
+				<u-col span="9">
 					<view>
 						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">{{name}}</text>
 					</view>
@@ -22,57 +22,81 @@
 				</u-col>
 				<u-col span="9">
 					<view class="inputview">
-						<input class="form_style" type="number" v-model="phone" placeholder="请输入联系方式"></input>
+						<input class="form_style" type="number" maxlength="11" v-model="phone"
+							placeholder="请输入联系方式"></input>
 					</view>
 				</u-col>
 			</u-row>
 		</view>
+		<view class="line-item">
+			<u-line color="#615858" length="80%"></u-line>
+		</view>
 
 
-		<view class="grid">
+		<view>
 			<view>
 				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
 			</view>
-			<uni-grid class="grid-item" :column="3" @change="change" :border="false">
-				<uni-grid-item v-for="(item, index) in image_list" :index="index" :key="index">
-					<view :class="item.class">
-						<image :src="item.src" class="image" mode="aspectFill" />
-						<text class="text">{{item.name}}</text>
-					</view>
-				</uni-grid-item>
-			</uni-grid>
+			<view style="padding-top: 15upx;">
+				<uni-grid class="grid" :column="3" @change="change" :showBorder="false">
+					<uni-grid-item class="grid-item" style="width: 200upx; height: 200upx; "
+						v-for="(item, index) in image_list" :index="index" :key="index">
+						<view :class="item.class">
+							<image :src="item.src" class="image" mode="aspectFill" />
+							<text class="text">{{item.name}}</text>
+						</view>
+					</uni-grid-item>
+				</uni-grid>
+			</view>
+
 		</view>
-		<view class="grid">
-			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
+		<view class="line-item">
+			<u-line color="#615858" length="80%"></u-line>
+		</view>
+		<view>
+			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">上传物品图片:</text>
 			<scroll-view style="padding-top:10px;" scroll-y="true" class="scroll-Y">
 				<view>
 					<u-upload class="upload" :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1"
 						multiple :maxCount="5" :previewFullImage="true" width="170" height="170">
-						<image src="../../static/fix/upload.png" mode="widthFix"
-							style="width: 170upx;height: 170upx; border-radius: 30px; background-color: #f5f5f5;">
+						<image src="../../static/fix/upload.png" mode="widthFix" style="width: 170upx;height: 170upx;">
 						</image>
 					</u-upload>
 				</view>
 			</scroll-view>
-
-
-
 		</view>
-		<button @click="submit">提交</button>
-		<button @click="refresh">刷新</button>
-		<view style="margin-top: 500upx;">
-			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
+		<view class="line-item">
+			<u-line color="#615858" length="80%"></u-line>
+		</view>
+
+		<view>
+			<view>
+				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">描述:</text>
+			</view>
+			<view>
+				<u--textarea class="textarea" v-model="describe" placeholder="请输入内容" count maxlength="50" autoHeight></u--textarea>
+			</view>
+		</view>
+
+
+		<view class="line-item">
+			<u-line color="#615858" length="80%"></u-line>
+		</view>
+
+
+
+		<view >
+			<button class="submit-btn" @click="submit" >提交</button>
 		</view>
 		<view>
-			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
-		</view>
-		<view>
-			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
-		</view>
-		<view>
-			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
+			<u-toast ref="uToast" />
 		</view>
 
+
+		<view style="margin-top:200upx;">
+			
+		</view>
+		
 		<tabBar :current="3"></tabBar>
 	</view>
 </template>
@@ -81,10 +105,11 @@
 	export default {
 		data() {
 			return {
-				aaa:"6666666666666666",
+				select:0,
+				describe: '',
 				//设置图片event
 				event_image: [],
-				name: '',
+				name: '高富帅',
 				phone: '',
 				fileList1: [],
 				image_list: [{
@@ -147,14 +172,19 @@
 				let {
 					index
 				} = e.detail
+					
 
-				uni.showToast({
-					title: `点击第${index+1}个宫格`,
-					icon: 'none'
-				})
-				if (this.image_list[index].select === 0) {
-					this.image_list[index].class = "grid-item-color",
-						this.image_list[index].select = 1
+				//背景颜色调整
+				if (this.image_list) {
+					this.image_list[index].class = "grid-item-color"
+					this.image_list[index].select = 1
+					this.select=1
+					for (let i = 0; i < this.image_list.length; i++) {
+						if (i !== index) {
+							this.image_list[i].class = "grid-item-box"
+							this.image_list[i].select = 0
+						}
+					}
 					console.log(e.detail.index)
 					// if (e.detail.index === 0) {
 					// 	uni.request({
@@ -175,11 +205,15 @@
 					// 		}
 					// 	})
 					// }
-				} else {
-					this.image_list[index].class = "grid-item-box"
-					this.image_list[index].select = 0
 				}
-
+			},
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+			
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
 			},
 			// 删除图片
 			deletePic(event) {
@@ -216,11 +250,17 @@
 			},
 			async submit() {
 				let len = this.event_image.length
-				for (let i = 0; i < len; i++) {
-					var result = await this.uploadFilePromise(this.event_image[i])
+				if(len>0&&this.select===1&&this.phone){
+					for (let i = 0; i < len; i++) {
+						await this.uploadFilePromise(this.event_image[i])
 					
+					}
+					this.showToast("提交成功", 'success')
 				}
-				
+				else{
+					this.showToast("请选择物品类型和联系方式", 'error')
+				}
+
 			},
 			refresh() {
 				uni.reLaunch({
@@ -236,17 +276,17 @@
 						formData: {
 							// user: 'test'
 						},
-						
-						success: (res) => {
 
+						success: (res) => {
+							resolve(res)
 							console.log("成功", res);
 
 
 						},
-						fail: (res) => {
+						fail: (err) => {
+							reject(err)
+							console.warn("失败", err);
 
-							console.warn("失败", res);
-							
 
 						},
 					});
@@ -254,11 +294,15 @@
 			},
 
 
+		},
+		onNavigationBarButtonTap(e) {
+			this.refresh();
 		}
+
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.container {
 		padding: 20px;
 		font-size: 14px;
@@ -277,7 +321,7 @@
 	}
 
 	.inputview {
-		background-color: #e6e6e6;
+		background-color: #ffffff;
 		font-size: 35upx;
 		height: 80upx;
 		width: 500upx;
@@ -298,49 +342,87 @@
 
 
 	.grid {
-		padding-top: 30upx;
+		/* padding-left: 50px; */
+		// width: 90%;
+		display: flex;
+		margin: 0 auto;
 
 	}
 
 	.grid-item-box {
 		flex: 1;
-		/* position: relative; */
-		/* #ifndef APP-NVUE */
 		display: flex;
-		/* #endif */
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		padding-top: 15px;
-
-		/* 		background-color: #e6e6e6;
-		border-radius: 80upx; */
+		border-radius: 120upx;
+		background-color: #fefeff;
 	}
 
 	.grid-item-color {
 		flex: 1;
-		/* position: relative; */
-		/* #ifndef APP-NVUE */
 		display: flex;
-		/* #endif */
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		padding-top: 15px;
-		background-color: #9e9e9e;
-
+		background-color: #94d6ff;
+		border-radius: 120upx;
 	}
 
 	.grid-item {
-		padding-top: 15upx;
+		margin-top: 20upx;
+		margin-left: 40upx;
+		border-radius: 120upx;
 
 	}
 
 	.upload {
 		padding-top: 15upx;
 		width: 100%;
-		height: 150px;
+		height: 200px;
 		margin-left: 20upx;
 		/* 		background-color:#fafafa  ; */
+	}
+
+	.line-item {
+		flex: 1;
+		/* position: relative; */
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 30upx;
+
+	}
+
+	.textarea {
+		font-size: 555upx;
+		margin-left: 15upx;
+		margin-top: 20upx;
+		font-weight: 600
+	}
+
+	.box-bg {
+		background-color: #F5F5F5;
+		padding: 5px 0;
+	}
+	.submit-btn {
+		width: 630upx;
+		height: 76upx;
+		line-height: 76upx;
+		border-radius: 10px;
+		margin-top: 28upx;
+		background: #566cec;
+		color: #ffffff;
+		font-size: 28upx;
+		-moz-box-shadow: 0 0 10px #06c;
+		-webkit-box-shadow: 0 0 10px #b9b9b9;
+		box-shadow: 0 0 10px #cdcdcd;
+		border-radius: 100px;
+	
 	}
 </style>
