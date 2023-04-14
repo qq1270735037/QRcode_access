@@ -62,7 +62,7 @@
 						
 						text: '报修',
 						customIcon: false,
-						pagePath: "pages/index2/index"
+						pagePath: "pages/fix/fix"
 					},
 					{
 						margin: "",
@@ -71,7 +71,7 @@
 						src: "../../static/tabbar/my-fill.png",
 						text: '我的',
 						customIcon: false,
-						pagePath: "pages/index3/index"
+						pagePath: "pages/my/my"
 					}
 				],
 			}

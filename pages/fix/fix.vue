@@ -1,8 +1,8 @@
 <template>
 
 	<view>
-		<view>
-			<u-row>
+		<view style="background-color: #ffffff;margin-top: 15upx;">
+			<u-row style="padding-top: 15upx;">
 				<u-col span="3">
 					<view>
 						<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">个人信息: </text>
@@ -28,18 +28,13 @@
 				</u-col>
 			</u-row>
 		</view>
-		<view class="line-item">
-			<u-line color="#615858" length="80%"></u-line>
-		</view>
-
-
-		<view>
+		<view style="background-color: #ffffff;margin-top: 15upx; height: 760upx;"> 
 			<view>
 				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">选择报修物品:</text>
 			</view>
 			<view style="padding-top: 15upx;">
-				<uni-grid class="grid" :column="3" @change="change" :showBorder="false">
-					<uni-grid-item class="grid-item" style="width: 200upx; height: 200upx; "
+				<uni-grid class="grid" :column="3" @change="change" :showBorder="false"  :highlight="false">
+					<uni-grid-item class="grid-item" style="width: 180upx; height: 180upx; "
 						v-for="(item, index) in image_list" :index="index" :key="index">
 						<view :class="item.class">
 							<image :src="item.src" class="image" mode="aspectFill" />
@@ -50,10 +45,8 @@
 			</view>
 
 		</view>
-		<view class="line-item">
-			<u-line color="#615858" length="80%"></u-line>
-		</view>
-		<view>
+
+		<view style="background-color: #ffffff;margin-top: 15upx;">
 			<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">上传物品图片:</text>
 			<scroll-view style="padding-top:10px;" scroll-y="true" class="scroll-Y">
 				<view>
@@ -65,25 +58,16 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view class="line-item">
-			<u-line color="#615858" length="80%"></u-line>
-		</view>
 
-		<view>
+
+		<view style="background-color: #ffffff;margin-top: 15upx;">
 			<view>
 				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">描述:</text>
 			</view>
 			<view>
-				<u--textarea class="textarea" v-model="describe" placeholder="请输入内容" count maxlength="50" autoHeight></u--textarea>
+				<u--textarea class="textarea" v-model="describe"  placeholder="请输入内容"  maxlength="100" autoHeight></u--textarea>
 			</view>
 		</view>
-
-
-		<view class="line-item">
-			<u-line color="#615858" length="80%"></u-line>
-		</view>
-
-
 
 		<view >
 			<button class="submit-btn" @click="submit" >提交</button>
@@ -264,7 +248,7 @@
 			},
 			refresh() {
 				uni.reLaunch({
-					url: '/pages/index2/index'
+					url: '/pages/fix/fix'
 				})
 			},
 			uploadFilePromise(url) {
@@ -346,7 +330,8 @@
 		// width: 90%;
 		display: flex;
 		margin: 0 auto;
-
+		border-radius: 120upx;
+		border-color:#ffffff;
 	}
 
 	.grid-item-box {
@@ -357,7 +342,7 @@
 		justify-content: center;
 		padding-top: 15px;
 		border-radius: 120upx;
-		background-color: #fefeff;
+		background-color: #f1f1f1;
 	}
 
 	.grid-item-color {
@@ -372,8 +357,8 @@
 	}
 
 	.grid-item {
-		margin-top: 20upx;
-		margin-left: 40upx;
+		margin-top: 30upx;
+		margin-left: 55upx;
 		border-radius: 120upx;
 
 	}
@@ -403,7 +388,8 @@
 		font-size: 555upx;
 		margin-left: 15upx;
 		margin-top: 20upx;
-		font-weight: 600
+		font-weight: 600;
+		
 	}
 
 	.box-bg {

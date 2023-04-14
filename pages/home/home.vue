@@ -1,10 +1,8 @@
 <template>
 
 	<view>
-		<view>
-			<u-back-top class="backicon" :scroll-top="scrollTop" top="60"></u-back-top>
-		</view>
-		<view>
+		
+		<view >
 			<swiper class="swiper-item" indicator-dots=true autoplay=true interval="8000" circular>
 				<swiper-item v-for="(item,index) in image_list" :key="index" >
 					<image class="swiper-image" :src="item.src"></image>
@@ -59,19 +57,19 @@
 
 
 	.swiper-item {
-		display: block;
+		display: flex;
 		height: 380upx;
 		text-align: center;
-		margin-top: 20upx;
 		line-height: 20upx;
-
+		margin: auto;
+		background-color: #ffffff;
 	}
 
 	.swiper-image {
 		border-radius: 50upx;
 		height: 350upx;
 		width: 700upx;
-
+		
 	}
 	.backicon{
 		margin-bottom: 50upx;

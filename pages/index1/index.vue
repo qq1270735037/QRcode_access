@@ -2,7 +2,7 @@
 	
 	<view >
 		
-		<button>33333333333333333</button>
+		
 		<tabBar :current="2"></tabBar>
 	</view>
 </template>
@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				href: 'https://uniapp666666666666666666ponent/README?id=uniui'
+				
 			}
 			
 		},

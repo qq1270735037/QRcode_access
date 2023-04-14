@@ -51,17 +51,17 @@
 		},
 
 		{
-			"path": "pages/index2/index",
+			"path": "pages/fix/fix",
 			"style": {
 				"navigationBarTitleText": "码上禁",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
-							"text": "&#xe8aa;",
+							"text": "\ue8aa",
 							"fontSrc": "/static/fix/refresh/iconfont.ttf",
 							"fontSize": "25",
 							"float": "right"
-							
+
 						}]
 					}
 				}
@@ -69,17 +69,46 @@
 		},
 
 		{
-			"path": "pages/index3/index",
+			"path": "pages/my/my",
 			"style": {
 
 				"navigationBarTitleText": "码上禁"
+
+				
+			}
+		},
+
+
+
+
+		{
+			"path": "pages/userinfo/userinfo",
+			"style": {
+
+				"navigationBarTitleText": "个人信息",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue8aa",
+							"fontSrc": "/static/fix/refresh/iconfont.ttf",
+							"fontSize": "25",
+							"float": "right"
+				
+						}]
+					}
+				}
+			}
+
+		},
+		{
+			"path": "pages/changename/changename",
+			"style": {
+
+				"navigationBarTitleText": "更改名字"
 				// "app-plus": {"titleNView": false}
 			}
+
 		}
-
-
-
-
 	],
 
 	"tabBar": {
@@ -99,11 +128,11 @@
 
 			}, {
 
-				"pagePath": "pages/index2/index"
+				"pagePath": "pages/fix/fix"
 
 			}, {
 
-				"pagePath": "pages/index3/index"
+				"pagePath": "pages/my/my"
 
 			}
 
@@ -112,7 +141,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {
 			"background": "#efeff4"
