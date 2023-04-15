@@ -10,12 +10,12 @@
 		<view class="login">
 			<image class="logo" src="../../static/login/door.png" mode="widthFix"></image>
 		</view>
-		<form name="from1" >
+		<form name="from1">
 			<!-- 账号 -->
 			<view class="inputView">
 				<image class="keyImage" src="../../static/login/account.png"></image>
 
-				<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="userId" @input="onInput"
+				<input class="inputText" type="number" placeholder="请输入账号" value="user" v-model="userId" @input="onInput"
 					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
 			</view>
 
@@ -56,9 +56,8 @@
 		<view class="loginBtnView">
 			<button class="loginBtn" @tap="lands" :disabled=disable_btn>登录</button>
 		</view>
-
 		<view>
-			<u-toast ref="uToast"></u-toast>
+			<u-toast ref="uToast" />
 		</view>
 
 
@@ -102,7 +101,7 @@
 			}
 		},
 		onLoad() {
-			uni.setStorageSync('linkAddress', 'http://127.0.0.1:8001/');
+			uni.setStorageSync('linkAddress', 'http://127.0.0.1:9999/');
 		},
 		onShow() {
 			this.userId = uni.getStorageSync('global_ID');
@@ -130,6 +129,7 @@
 				} else {
 					this.disable_btn = true
 				}
+				
 			},
 			register_account() {
 				uni.showLoading({
@@ -159,35 +159,62 @@
 			},
 			showToast(Msg, Type) {
 				this.$refs.uToast.show({
-					title: Msg,
-					type: Type
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
 				})
 			},
 			lands() {
-				uni.setStorageSync('linkAddress', 'http://127.0.0.1:8001/');
+				uni.setStorageSync('linkAddress', 'http://127.0.0.1:9999/');
 				this.disable_btn = true
 				uni.showLoading({
 					title: '加载中'
 				});
 				uni.request({
-					url:'http://127.0.0.1:8888/',
-					success: res =>{
-						
-						console.log(res);
-						
+					url: 'http://127.0.0.1:9999/'+'login',
+					data: {
+					        userId: this.userId
+					    },
+					method:"POST",
+					dataType:"json",
+					success: (res) => {
+						let result=res.data.code
+						console.log("success:",res.data.code);
+						if(result===200){
+							setTimeout(function() {
+								uni.hideLoading();
+							
+								//在起始页面跳转到test.vue页面并传递参数
+								uni.switchTab({
+									url: '../home/home'
+								});
+							
+							}, 500);
 						}
+						if(result===100){
+							setTimeout(()=> {
+								uni.hideLoading();
+								this.userPassword=""
+								this.$refs.uToast.show({
+									message: "账号或密码错误",
+									type: "error",
+								})
+								
+							}, 500);
+						}
+						
+						
+					},
+					fail: (res) => {
+						console.log(res);
+						uni.hideLoading();
+						this.showToast("网络错误", 'error')
+					}
 				})
 
-				setTimeout(function() {
-					uni.hideLoading();
-					
-					//在起始页面跳转到test.vue页面并传递参数
-					uni.switchTab({
-						url: '../home/home'
-					});
 
-				}, 2000);
-				
+
 
 
 			},
@@ -244,7 +271,7 @@
 		align-items: center
 	}
 
-	
+
 	.keyImage {
 		margin-left: 15rpx;
 		margin-button: 0rpx;

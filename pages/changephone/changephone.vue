@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u--input v-model="nickname" class="inputview" placeholder="请输入名字" border="bottom" clearable
+		<u--input v-model="phone" type="number" class="inputview" placeholder="请输入联系方式" border="bottom" clearable
 			fontSize="40upx"></u--input>
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>
@@ -15,7 +15,7 @@
 			//this.nickname = option.nickname
 			if (option.my_list) {
 				const item = JSON.parse(decodeURIComponent(option.my_list));
-				this.nickname = item.text
+				this.phone = item.text
 			}
 			
 
@@ -23,7 +23,7 @@
 		},
 		data() {
 			return {
-				nickname: "",
+				phone: "",
 				
 			};
 		},

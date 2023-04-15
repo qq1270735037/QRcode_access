@@ -54,12 +54,12 @@
 				<view>
 					<u-cell-group>
 						<u-cell class="select_item" title="请选择身份" :value="identify_type" :isLink="true"
-							arrow-direction="right" border:false @click="identify_change"></u-cell>
+							 arrow-direction="right" border:false @click="identify_change"></u-cell>
 					</u-cell-group>
 				</view>
 				<view>
 
-					<u-picker :show="pick_show" :columns="columns" @cancel="cancel" @confirm="confirm"
+					<u-picker :show="pick_show" :columns="columns" visibleItemCount=3 itemHeight=120 @cancel="cancel" @confirm="confirm"
 						@change='changeHandler'></u-picker>
 				</view>
 

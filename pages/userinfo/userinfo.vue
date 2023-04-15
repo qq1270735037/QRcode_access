@@ -42,7 +42,11 @@
 				</u-col>
 			</u-row>
 		</view>
-
+		<view>
+			<u-datetime-picker :show="showdate" :maxDate="maxdate" visibleItemCount=6 itemHeight=88 v-model="datepicker" mode="date"
+				@confirm="dateconfirm" @cancel="datecancel"></u-datetime-picker>
+			<u-picker :show="locationshow"  visibleItemCount=4 itemHeight=120 :columns="location" @confirm="locationconfirm" @cancel="locationcancel"></u-picker>
+		</view>
 	</view>
 </template>
 
@@ -50,6 +54,13 @@
 	export default {
 		data() {
 			return {
+				maxdate:new Date().getTime(),
+				location:[
+					['1号楼', '2号楼', '3号楼','4号楼','5号楼','6号楼','7号楼']
+				],
+				locationshow:false,
+				showdate: false,
+				datepicker: Number(new Date()),
 				flag1: true,
 				myImage: "../../static/home/ad3.jpg",
 				name: "高富帅",
@@ -64,25 +75,24 @@
 						name: "ID",
 						text: "600500",
 						select: 1,
-						url: "pages/changename/changename"
+
 					},
 					{
 						name: "性别",
-						text: "男",
+						text: "女",
 						select: 2,
-						url: "pages/changename/changename"
+						url: "pages/changegender/changegender"
 					},
 					{
 						name: "联系方式",
 						text: "18888888888",
 						select: 3,
-						url: "pages/changename/changename"
+						url: "pages/changephone/changephone"
 					},
 					{
 						name: "生日",
 						text: "2000-11-11",
 						select: 4,
-						url: "pages/changename/changename"
 					},
 					{
 						name: "身份证",
@@ -92,7 +102,7 @@
 					},
 					{
 						name: "楼栋号",
-						text: "6号楼",
+						text: "2号楼",
 						select: 6,
 						url: "pages/changename/changename"
 					},
@@ -126,31 +136,42 @@
 				console.log("点击了", e)
 				switch (e) {
 					case 0:
-						let url = "/" + this.my_list[e].url + "?nickname=" + this.my_list[e].text
+						let url = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
 
 						uni.navigateTo({
 							url: url,
-							events: {
-								// 为指定事件添加一个监听器，获取被打开页面传送到当前页面的数据
-								acceptDataFromOpenedPage: function(data) {
-									console.log("acceptDataFromOpenedPage",data)
-								},
-								submitname: function(data) {
-										console.log("submitname",data)
-										console.log("submitname",data.code)
-									}
-									
-							},
-							success: function(res) {
-								// 通过eventChannel向被打开页面传送数据
-								res.eventChannel.emit('acceptDataFromOpenerPage', {
-									data: '上一页传参'
-								})
-							}
+
 						});
 						break;
-					case 1:
+					case 2:
+						let url2 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
 
+						uni.navigateTo({
+							url: url2,
+
+						});
+						break;
+					case 3:
+						let url3 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
+
+						uni.navigateTo({
+							url: url3,
+
+						});
+						break;
+					case 4:
+						this.showdate = true
+						break;
+					case 5:
+						let url5 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
+
+						uni.navigateTo({
+							url: url5,
+
+						});
+						break;
+					case 6:
+						this.locationshow = true
 						break;
 					default:
 
@@ -161,6 +182,20 @@
 
 
 			},
+			dateconfirm(e) {
+				console.log("ok", uni.$u.timeFormat(e.value, 'yyyy-mm-dd'))
+				this.showdate = false
+			},
+			datecancel(e) {
+				this.showdate = false
+			},
+			locationconfirm(e){
+				this.locationshow = false
+				console.log("ok",e.indexs[0])
+			},
+			locationcancel(e){
+				this.locationshow = false
+			},
 			refresh() {
 				uni.reLaunch({
 					url: '/pages/userinfo/userinfo'
@@ -168,11 +203,19 @@
 			},
 		},
 		onNavigationBarButtonTap(e) {
-			this.refresh();
+			console.log("e",e)
+			if(e.float==="right"){
+				this.refresh();
+			}
+			if(e.float==="left"){
+				uni.reLaunch({
+					url: '/pages/my/my'
+				})
+			}
 		},
-	
 
-	
+
+
 	}
 </script>
 

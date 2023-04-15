@@ -84,10 +84,28 @@
 						class: "grid-item-box",
 						select: 3
 					},
+					{
+						src: "../../static/my/loginout.png",
+						name: "退出登录",
+						class: "grid-item-box",
+						select: 4
+					},
 				],
 				page:[
 					{
 						url:"pages/userinfo/userinfo"
+					},
+					{
+						url:"pages/userinfo/userinfo"
+					},
+					{
+						url:"pages/userinfo/userinfo"
+					},
+					{
+						url:"pages/userinfo/userinfo"
+					},
+					{
+						url:"pages/login/login"
 					},
 				],
 			}
@@ -112,9 +130,17 @@
 			select_cell(e){
 				console.log("点击了：",e)
 				let url="/"+this.page[e].url
-				uni.navigateTo({
-					url: url
-				});
+				if(e!==4){
+					uni.reLaunch({
+						url: url
+					});
+				}
+				else{
+					uni.redirectTo({
+						url: url
+					});
+				}
+				
 			},
 		}
 	}

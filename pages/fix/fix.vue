@@ -236,8 +236,8 @@
 				let len = this.event_image.length
 				if(len>0&&this.select===1&&this.phone){
 					for (let i = 0; i < len; i++) {
-						await this.uploadFilePromise(this.event_image[i])
-					
+						let result=await this.uploadFilePromise(this.event_image[i])
+						console.log(result)
 					}
 					this.showToast("提交成功", 'success')
 				}
@@ -254,7 +254,7 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url: 'http://127.0.0.1:8888/fix/image/upload', // 仅为示例，非真实的接口地址
+						url: 'http://127.0.0.1:9999/fix/image/upload', // 仅为示例，非真实的接口地址
 						filePath: url,
 						name: 'file',
 						formData: {

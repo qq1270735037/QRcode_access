@@ -94,7 +94,15 @@
 							"fontSize": "25",
 							"float": "right"
 				
-						}]
+						},
+						{
+							"text": "\ue613",
+							"fontSrc": "/static/fix/back/iconfont.ttf",
+							"fontSize": "25",
+							"float": "left"
+										
+						}
+						]
 					}
 				}
 			}
@@ -109,7 +117,37 @@
 			}
 
 		}
-	],
+	    
+        
+           ,{
+            "path" : "pages/changegender/changegender",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/changephone/changephone",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+		    "path" : "pages/changecard/changecard",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+		
+    ],
 
 	"tabBar": {
 		"custom": true,
