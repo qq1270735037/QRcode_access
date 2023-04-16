@@ -8,11 +8,14 @@
 						<text style="font-size: 35upx; font-weight:400">{{item.name}}</text>
 					</view>
 				</u-col>
-		
+
 			</u-row>
 		</view>
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>
+		</view>
+		<view>
+			<u-toast ref="uToast" />
 		</view>
 	</view>
 
@@ -20,60 +23,112 @@
 
 <script>
 	export default {
-		onLoad: function(option) {
-			//this.nickname = option.nickname
-			if (option.my_list) {
-				const item = JSON.parse(decodeURIComponent(option.my_list));
-				if(item.text==="男"){
-					this.genderlist[0].class="listcolor"
-					this.genderlist[1].class="list"
-				}
-				else{
-					this.genderlist[0].class="list"
-					this.genderlist[1].class="listcolor"
+		onLoad() {
+
+			if (uni.getStorageSync("info")) {
+				const item = uni.getStorageSync("info").userGender
+				if (item === "男") {
+					this.gender="男"
+					this.genderlist[0].class = "listcolor"
+					this.genderlist[1].class = "list"
+				} else {
+					this.gender="女"
+					this.genderlist[0].class = "list"
+					this.genderlist[1].class = "listcolor"
 				}
 			}
-			
+
 
 
 		},
 		data() {
 			return {
-				nickname: "",
+				gender: "",
 				genderlist: [{
 						name: "男",
 						select: 0,
-						class:"list"
+						class: "list"
 					},
 					{
 						name: "女",
 						select: 1,
-						class:"list"
+						class: "list"
 					},
-					
-				
+
+
 				],
 			};
 		},
 		methods: {
-			submit() {
-				
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
 			},
-			select_cell(e){
-				
-					console.log("点击了", e)
-					if(e===0){
-						this.genderlist[0].class="listcolor"
-						this.genderlist[1].class="list"
+			submit() {
+
+				let datas = uni.getStorageSync("info")
+
+				uni.request({
+					url: 'http://127.0.0.1:9999/user/edit',
+					data: {
+						userId: datas.userId,
+						userGender: this.gender
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+						let result = res.data.code
+						console.log("success:", res);
+						uni.setStorageSync('info', res.data.datas)
+
+						if (result === 200) {
+							this.showToast("修改成功", 'success')
+							setTimeout(() => {
+
+								uni.navigateBack()
+							}, 1000);
+						}
+						if (result === 100) {
+							this.showToast("修改失败", 'error')
+							setTimeout(() => {
+
+
+							}, 1000);
+						}
+
+
+					},
+					fail: (res) => {
+						console.log(res);
+						uni.hideLoading();
+						this.showToast("网络错误", 'error')
 					}
-					else{
-						this.genderlist[0].class="list"
-						this.genderlist[1].class="listcolor"
-					}
-				
-				
-				
-				
+				})
+
+
+
+
+			},
+			select_cell(e) {
+
+				console.log("点击了", e)
+				if (e === 0) {
+					this.gender="男"
+					this.genderlist[0].class = "listcolor"
+					this.genderlist[1].class = "list"
+				} else {
+					this.gender="女"
+					this.genderlist[0].class = "list"
+					this.genderlist[1].class = "listcolor"
+				}
+
+
+
+
 			},
 
 		},
@@ -105,12 +160,13 @@
 		border-radius: 100px;
 
 	}
+
 	.left {
 		padding-left: 50upx;
 		background-color: aqua;
 		height: 200upx;
 	}
-	
+
 	.imagetext {
 		font-size: 35upx;
 		height: 155upx;
@@ -118,19 +174,21 @@
 		display: flex;
 		align-items: center;
 		flex-direction: row;
-	
+
 	}
-	
+
 	.list {
 		height: 110upx;
 		background-color: #ffffff;
 		margin-top: 5upx
 	}
+
 	.listcolor {
 		height: 110upx;
 		background-color: #55aaff;
 		margin-top: 5upx
 	}
+
 	.image {
 		width: 40upx;
 		height: 40upx;

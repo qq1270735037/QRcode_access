@@ -98,13 +98,12 @@
 						name: "身份证",
 						text: "353232323256565656",
 						select: 5,
-						url: "pages/changename/changename"
+						url: "pages/changecard/changecard"
 					},
 					{
 						name: "楼栋号",
 						text: "2号楼",
-						select: 6,
-						url: "pages/changename/changename"
+						select: 6
 					},
 
 				],
@@ -134,28 +133,24 @@
 			},
 			select_cell(e) {
 				console.log("点击了", e)
+				let url = "/" + this.my_list[e].url
 				switch (e) {
+					
 					case 0:
-						let url = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
-
 						uni.navigateTo({
 							url: url,
 
 						});
 						break;
 					case 2:
-						let url2 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
-
 						uni.navigateTo({
-							url: url2,
+							url: url,
 
 						});
 						break;
 					case 3:
-						let url3 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
-
 						uni.navigateTo({
-							url: url3,
+							url: url,
 
 						});
 						break;
@@ -163,10 +158,8 @@
 						this.showdate = true
 						break;
 					case 5:
-						let url5 = "/" + this.my_list[e].url + "?my_list=" + JSON.stringify(this.my_list[e])
-
 						uni.navigateTo({
-							url: url5,
+							url: url,
 
 						});
 						break;
@@ -184,6 +177,7 @@
 			},
 			dateconfirm(e) {
 				console.log("ok", uni.$u.timeFormat(e.value, 'yyyy-mm-dd'))
+				
 				this.showdate = false
 			},
 			datecancel(e) {
@@ -203,7 +197,7 @@
 			},
 		},
 		onNavigationBarButtonTap(e) {
-			console.log("e",e)
+			// console.log("e",e)
 			if(e.float==="right"){
 				this.refresh();
 			}
@@ -213,7 +207,35 @@
 				})
 			}
 		},
-
+		onShow() {
+			let datas = uni.getStorageSync("info")
+			this.my_list[0].text=datas.userName
+			this.my_list[1].text=datas.userId
+			this.my_list[2].text=datas.userGender
+			this.my_list[3].text=datas.userNumber
+			this.my_list[4].text=uni.$u.timeFormat(datas.userDate, 'yyyy-mm-dd')
+			this.my_list[5].text=datas.userIdcard
+			this.my_list[6].text=datas.userLocation+"号楼"
+			uni.request({
+				url: 'http://localhost:9999/user/image',
+				responseType: 'arraybuffer',
+				data: {
+					userImage:datas.userImage
+				},
+				success: (res) => {
+					// console.log(res);
+					let result = res.data;
+					//我们所需要的数据
+					this.myImage = 'data:image/png;base64,' + btoa(new Uint8Array(
+						result).reduce((
+						result, byte) => result + String.fromCharCode(byte), ''));
+					//微信小程序不支持btoa，所以可以用下面这个
+					//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
+			
+			
+				}
+			})
+		}
 
 
 	}

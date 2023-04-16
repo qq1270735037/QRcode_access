@@ -5,31 +5,75 @@
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>
 		</view>
+		<view>
+			<u-toast ref="uToast" />
+		</view>
 	</view>
 
 </template>
 
 <script>
 	export default {
-		onLoad: function(option) {
-			//this.nickname = option.nickname
-			if (option.my_list) {
-				const item = JSON.parse(decodeURIComponent(option.my_list));
-				this.nickname = item.text
-			}
-			
-
+		onShow() {
+			this.nickname = uni.getStorageSync("info").userName
 
 		},
 		data() {
 			return {
 				nickname: "",
-				
+
 			};
 		},
 		methods: {
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
+			},
 			submit() {
+
 				if (this.nickname) {
+					let datas = uni.getStorageSync("info")
+
+					uni.request({
+						url: 'http://127.0.0.1:9999/user/edit',
+						data: {
+							userId: datas.userId,
+							userName: this.nickname
+						},
+						method: "POST",
+						dataType: "json",
+						success: (res) => {
+							let result = res.data.code
+							console.log("success:", res);
+							uni.setStorageSync('info', res.data.datas)
+
+							if (result === 200) {
+								this.showToast("修改成功", 'success')
+								setTimeout(() => {
+
+									uni.navigateBack()
+								}, 1000);
+							}
+							if (result === 100) {
+								this.showToast("修改失败", 'error')
+								setTimeout(() => {
+							
+	
+								}, 1000);
+							}
+
+
+						},
+						fail: (res) => {
+							console.log(res);
+							uni.hideLoading();
+							this.showToast("网络错误", 'error')
+						}
+					})
 
 
 				}

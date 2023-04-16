@@ -1,9 +1,12 @@
 <template>
 	<view>
-		<u--input v-model="phone" type="number" maxlength=18 class="inputview" placeholder="请输入证件号" border="bottom" clearable
+		<u--input v-model="cardid" type="number" maxlength=18 class="inputview" placeholder="请输入证件号" border="bottom" clearable
 			fontSize="40upx"></u--input>
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>
+		</view>
+		<view>
+			<u-toast ref="uToast" />
 		</view>
 	</view>
 
@@ -11,28 +14,69 @@
 
 <script>
 	export default {
-		onLoad: function(option) {
-			//this.nickname = option.nickname
-			if (option.my_list) {
-				const item = JSON.parse(decodeURIComponent(option.my_list));
-				this.phone = item.text
-			}
-			
-
+		onLoad(){
+			this.cardid = uni.getStorageSync("info").userIdcard
 
 		},
 		data() {
 			return {
-				phone: "",
+				cardid: "",
 				
 			};
 		},
 		methods: {
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+			
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
+			},
 			submit() {
-				if (this.nickname) {
-
-
-				}
+					if (this.cardid) {
+						let datas = uni.getStorageSync("info")
+				
+						uni.request({
+							url: 'http://127.0.0.1:9999/user/edit',
+							data: {
+								userId: datas.userId,
+								userIdcard: this.cardid
+							},
+							method: "POST",
+							dataType: "json",
+							success: (res) => {
+								let result = res.data.code
+								console.log("success:", res);
+								uni.setStorageSync('info', res.data.datas)
+				
+								if (result === 200) {
+									this.showToast("修改成功", 'success')
+									setTimeout(() => {
+				
+										uni.navigateBack()
+									}, 1000);
+								}
+								if (result === 100) {
+									this.showToast("修改失败", 'error')
+									setTimeout(() => {
+								
+					
+									}, 1000);
+								}
+				
+				
+							},
+							fail: (res) => {
+								console.log(res);
+								uni.hideLoading();
+								this.showToast("网络错误", 'error')
+							}
+						})
+				
+				
+					}
+				
 			},
 
 		},

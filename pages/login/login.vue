@@ -15,8 +15,8 @@
 			<view class="inputView">
 				<image class="keyImage" src="../../static/login/account.png"></image>
 
-				<input class="inputText" type="number" placeholder="请输入账号" value="user" v-model="userId" @input="onInput"
-					placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
+				<input class="inputText" type="number" placeholder="请输入账号" value="user" v-model="userId"
+					@input="onInput" placeholder-style='color:rgb(126, 126, 126);font-size:34rpx;' />
 			</view>
 
 			<!-- 密码 -->
@@ -32,9 +32,9 @@
 		<!-- 选择身份框 -->
 		<view class="uni-title">请选择身份</view>
 		<view class="checkid">
-			<u-radio-group v-model="radiovalue1" placement="row" @change="groupChange" shape="circle">
+			<u-radio-group v-model="radiovalue1" placement="row"  shape="circle">
 				<u-radio class="radioclass" size=40upx labelSize=25upx v-for="(item, index) in radiolist1" :key="index"
-					:label="item.name" :name="item.name">
+					:label="item.name" :name="item.name" @change="groupChange(index)">
 				</u-radio>
 			</u-radio-group>
 		</view>
@@ -55,9 +55,12 @@
 		<!-- 登录按钮 -->
 		<view class="loginBtnView">
 			<button class="loginBtn" @tap="lands" :disabled=disable_btn>登录</button>
-		</view>
+		
+
 		<view>
 			<u-toast ref="uToast" />
+		</view>
+			
 		</view>
 
 
@@ -73,6 +76,7 @@
 	export default {
 		data() {
 			return {
+				userType:'',
 				userId: '',
 				userPassword: '',
 				pwd2: '',
@@ -82,17 +86,18 @@
 				disable_btn: true,
 				clear: 0,
 				// 基本案列数据
-				radiolist1: [{
+				radiolist1: [
+					{
+						name: '管理员',
+						disabled: false
+					},
+					{
 						name: '业主/租户',
 						disabled: false
 					},
 					{
 
 						name: '游客',
-						disabled: false
-					},
-					{
-						name: '管理员',
 						disabled: false
 					}
 				],
@@ -120,16 +125,22 @@
 		},
 		methods: {
 			groupChange(n) {
-				console.log('groupChange', this.radiovalue1);
+				console.log('groupChange',n);
+				this.userType=n
 			},
 
 			onInput(e) {
+				if(this.rememberPassword === true){
+					uni.setStorageSync('global_ID', this.userId);
+					uni.setStorageSync('global_password', this.userPassword);
+				}
 				if (this.userId && this.userPassword) {
 					this.disable_btn = false
+					
 				} else {
 					this.disable_btn = true
 				}
-				
+
 			},
 			register_account() {
 				uni.showLoading({
@@ -161,50 +172,50 @@
 				this.$refs.uToast.show({
 					message: Msg,
 					type: Type,
-
+			
 					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
 				})
 			},
 			lands() {
 				uni.setStorageSync('linkAddress', 'http://127.0.0.1:9999/');
 				this.disable_btn = true
-				uni.showLoading({
-					title: '加载中'
-				});
 				uni.request({
-					url: 'http://127.0.0.1:9999/'+'login',
+					url: 'http://127.0.0.1:9999/' + 'login',
 					data: {
-					        userId: this.userId
-					    },
-					method:"POST",
-					dataType:"json",
+						userId: this.userId,
+						userPassword: this.userPassword,
+						userType:this.userType
+					},
+					method: "POST",
+					dataType: "json",
 					success: (res) => {
-						let result=res.data.code
-						console.log("success:",res.data.code);
-						if(result===200){
-							setTimeout(function() {
+						let result = res.data.code
+						console.log("success:", res.data.code);
+						if (result === 200) {
+							this.showToast("登录成功", 'success')
+							uni.setStorageSync('info',res.data.datas )
+							let datas=uni.getStorageSync("info")
+							console.log(datas)
+							setTimeout(()=> {
 								uni.hideLoading();
-							
 								//在起始页面跳转到test.vue页面并传递参数
 								uni.switchTab({
 									url: '../home/home'
 								});
-							
-							}, 500);
+
+							}, 2000);
 						}
-						if(result===100){
-							setTimeout(()=> {
-								uni.hideLoading();
-								this.userPassword=""
-								this.$refs.uToast.show({
-									message: "账号或密码错误",
-									type: "error",
-								})
-								
-							}, 500);
+						if (result === 100) {
+							this.showToast("账号或密码错误", 'error')
+							setTimeout(() => {
+								this.userPassword = ""
+
+
+							}, 2000);
 						}
 						
-						
+
+
 					},
 					fail: (res) => {
 						console.log(res);
