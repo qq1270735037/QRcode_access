@@ -73,7 +73,7 @@
 				let datas = uni.getStorageSync("info")
 
 				uni.request({
-					url: 'http://127.0.0.1:9999/user/edit',
+					url: 'http://47.100.242.36:6001/user/edit',
 					data: {
 						userId: datas.userId,
 						userGender: this.gender

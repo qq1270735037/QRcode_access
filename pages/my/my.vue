@@ -141,7 +141,7 @@
 				console.log("点击了：", e)
 				let url = "/" + this.page[e].url
 				if (e !== 4) {
-					uni.reLaunch({
+					uni.navigateTo({
 						url: url
 					});
 				} else {
@@ -168,10 +168,10 @@
 			this.id = datas.userId
 			console.log(datas.userImage);
 			uni.request({
-				url: 'http://localhost:9999/user/image',
+				url: 'http://47.100.242.36:6001/user/image',
 				responseType: 'arraybuffer',
 				data: {
-					userImage:datas.userImage
+					userImage: datas.userImage
 				},
 				success: (res) => {
 					// console.log(res);

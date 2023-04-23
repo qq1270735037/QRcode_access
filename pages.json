@@ -33,7 +33,7 @@
 		},
 
 		{
-			"path": "pages/index/index",
+			"path": "pages/travel/travel",
 			"style": {
 				"navigationBarTitleText": "码上禁"
 				// "app-plus": {"titleNView": false}
@@ -74,7 +74,7 @@
 
 				"navigationBarTitleText": "码上禁"
 
-				
+
 			}
 		},
 
@@ -87,23 +87,24 @@
 
 				"navigationBarTitleText": "个人信息",
 				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "\ue8aa",
-							"fontSrc": "/static/fix/refresh/iconfont.ttf",
-							"fontSize": "25",
-							"float": "right"
-				
-						},
-						{
-							"text": "\ue613",
-							"fontSrc": "/static/fix/back/iconfont.ttf",
-							"fontSize": "25",
-							"float": "left"
-										
-						}
-						]
-					}
+					// 	"titleNView": {
+					// 		"buttons": [{
+					// 			"text": "\ue8aa",
+					// 			"fontSrc": "/static/fix/refresh/iconfont.ttf",
+					// 			"fontSize": "25",
+					// 			"float": "right"
+
+					// 		}
+					// 		,
+					// 		{
+					// 			"text": "\ue613",
+					// 			"fontSrc": "/static/fix/back/iconfont.ttf",
+					// 			"fontSize": "25",
+					// 			"float": "left"
+
+					// 		}
+					// 		]
+					// 	}
 				}
 			}
 
@@ -117,37 +118,33 @@
 			}
 
 		}
-	    
-        
-           ,{
-            "path" : "pages/changegender/changegender",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/changephone/changephone",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
+
+
+		, {
+			"path": "pages/changegender/changegender",
+			"style": {
+				"navigationBarTitleText": "更改性别",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/changephone/changephone",
+			"style": {
+				"navigationBarTitleText": "更改电话",
+				"enablePullDownRefresh": false
+			}
+
+		},
 		{
-		    "path" : "pages/changecard/changecard",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": false
-		    }
-		    
+			"path": "pages/changecard/changecard",
+			"style": {
+				"navigationBarTitleText": "更改身份证号",
+				"enablePullDownRefresh": false
+			}
+
 		}
-		
-    ],
+
+	],
 
 	"tabBar": {
 		"custom": true,
@@ -158,7 +155,7 @@
 
 			{
 
-				"pagePath": "pages/index/index"
+				"pagePath": "pages/travel/travel"
 
 			}, {
 

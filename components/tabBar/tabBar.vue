@@ -39,11 +39,11 @@
 					{
 						margin: "",
 						class: "image_item",
-						src2: "../../static/register/open.png",
-						src: "https://cdn.uviewui.com/uview/common/bell.png",
-						text: '首页2',
+						src2: "../../static/tabbar/rocket.png",
+						src: "../../static/tabbar/rocket-fill.png",
+						text: '出行',
 						customIcon: false,
-						pagePath: "pages/index/index"
+						pagePath: "pages/travel/travel"
 					},
 					{
 						margin: "txt-item",

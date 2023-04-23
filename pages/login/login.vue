@@ -177,10 +177,10 @@
 				})
 			},
 			lands() {
-				uni.setStorageSync('linkAddress', 'http://127.0.0.1:9999/');
+				uni.setStorageSync('linkAddress', 'http://47.100.242.36:6001/');
 				this.disable_btn = true
 				uni.request({
-					url: 'http://127.0.0.1:9999/' + 'login',
+					url: 'http://47.100.242.36:6001/' + 'login',
 					data: {
 						userId: this.userId,
 						userPassword: this.userPassword,
@@ -190,7 +190,7 @@
 					dataType: "json",
 					success: (res) => {
 						let result = res.data.code
-						console.log("success:", res.data.code);
+						console.log("success:", res);
 						if (result === 200) {
 							this.showToast("登录成功", 'success')
 							uni.setStorageSync('info',res.data.datas )

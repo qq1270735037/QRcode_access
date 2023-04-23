@@ -43,9 +43,13 @@
 			</u-row>
 		</view>
 		<view>
-			<u-datetime-picker :show="showdate" :maxDate="maxdate" visibleItemCount=6 itemHeight=88 v-model="datepicker" mode="date"
-				@confirm="dateconfirm" @cancel="datecancel"></u-datetime-picker>
-			<u-picker :show="locationshow"  visibleItemCount=4 itemHeight=120 :columns="location" @confirm="locationconfirm" @cancel="locationcancel"></u-picker>
+			<u-datetime-picker :show="showdate" :minDate="-2209017943000" :maxDate="maxdate" visibleItemCount=6 itemHeight=88 v-model="datepicker"
+				mode="date" @confirm="dateconfirm" @cancel="datecancel"></u-datetime-picker>
+			<u-picker :show="locationshow" visibleItemCount=4 itemHeight=120 :columns="location"
+				@confirm="locationconfirm" @cancel="locationcancel"></u-picker>
+		</view>
+		<view>
+			<u-toast ref="uToast" />
 		</view>
 	</view>
 </template>
@@ -54,11 +58,11 @@
 	export default {
 		data() {
 			return {
-				maxdate:new Date().getTime(),
-				location:[
-					['1号楼', '2号楼', '3号楼','4号楼','5号楼','6号楼','7号楼']
+				maxdate: new Date().getTime(),
+				location: [
+					['1号楼', '2号楼', '3号楼', '4号楼', '5号楼', '6号楼', '7号楼']
 				],
-				locationshow:false,
+				locationshow: false,
 				showdate: false,
 				datepicker: Number(new Date()),
 				flag1: true,
@@ -102,7 +106,7 @@
 					},
 					{
 						name: "楼栋号",
-						text: "2号楼",
+						text: "2",
 						select: 6
 					},
 
@@ -112,6 +116,14 @@
 
 		},
 		methods: {
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
+			},
 			userImage() {
 				console.log("点击了头像")
 
@@ -135,7 +147,7 @@
 				console.log("点击了", e)
 				let url = "/" + this.my_list[e].url
 				switch (e) {
-					
+
 					case 0:
 						uni.navigateTo({
 							url: url,
@@ -177,50 +189,120 @@
 			},
 			dateconfirm(e) {
 				console.log("ok", uni.$u.timeFormat(e.value, 'yyyy-mm-dd'))
+				this.my_list[4].text = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
+
+				let datas = uni.getStorageSync("info")
 				
+				uni.request({
+					url: 'http://47.100.242.36:6001/user/edit',
+					data: {
+						userId: datas.userId,
+						userDate: this.my_list[4].text
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+						let result = res.data.code
+						console.log("success:", res);
+						uni.setStorageSync('info', res.data.datas)
+
+						if (result === 200) {
+							this.showToast("修改成功", 'success')
+							setTimeout(() => {
+
+								
+							}, 1000);
+						}
+						if (result === 100) {
+							this.showToast("修改失败", 'error')
+							setTimeout(() => {
+
+
+							}, 1000);
+						}
+
+
+					},
+					fail: (res) => {
+						console.log(res);
+						uni.hideLoading();
+						this.showToast("网络错误", 'error')
+					}
+				})
+
+
+
 				this.showdate = false
 			},
 			datecancel(e) {
 				this.showdate = false
 			},
-			locationconfirm(e){
+			locationconfirm(e) {
 				this.locationshow = false
-				console.log("ok",e.indexs[0])
+				let datas = uni.getStorageSync("info")
+				uni.request({
+					url: 'http://47.100.242.36:6001/user/edit',
+					data: {
+						userId: datas.userId,
+						userLocation: e.indexs[0]+1
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+						let result = res.data.code
+						console.log("success:", res);
+						uni.setStorageSync('info', res.data.datas)
+						let datas = uni.getStorageSync("info")
+						this.my_list[6].text=datas.userLocation+"号楼"
+						if (result === 200) {
+							this.showToast("修改成功", 'success')
+							setTimeout(() => {
+
+							
+							}, 1000);
+						}
+						if (result === 100) {
+							this.showToast("修改失败", 'error')
+							setTimeout(() => {
+
+
+							}, 1000);
+						}
+
+
+					},
+					fail: (res) => {
+						console.log(res);
+						uni.hideLoading();
+						this.showToast("网络错误", 'error')
+					}
+				})
+				console.log("ok", e.indexs[0])
 			},
-			locationcancel(e){
+			locationcancel(e) {
 				this.locationshow = false
 			},
-			refresh() {
-				uni.reLaunch({
-					url: '/pages/userinfo/userinfo'
-				})
-			},
+			// refresh() {
+			// 	uni.reLaunch({
+			// 		url: '/pages/userinfo/userinfo'
+			// 	})
+			// },
 		},
-		onNavigationBarButtonTap(e) {
-			// console.log("e",e)
-			if(e.float==="right"){
-				this.refresh();
-			}
-			if(e.float==="left"){
-				uni.reLaunch({
-					url: '/pages/my/my'
-				})
-			}
-		},
+	
 		onShow() {
 			let datas = uni.getStorageSync("info")
-			this.my_list[0].text=datas.userName
-			this.my_list[1].text=datas.userId
-			this.my_list[2].text=datas.userGender
-			this.my_list[3].text=datas.userNumber
-			this.my_list[4].text=uni.$u.timeFormat(datas.userDate, 'yyyy-mm-dd')
-			this.my_list[5].text=datas.userIdcard
-			this.my_list[6].text=datas.userLocation+"号楼"
+			this.my_list[0].text = datas.userName
+			this.my_list[1].text = datas.userId
+			this.my_list[2].text = datas.userGender
+			this.my_list[3].text = datas.userNumber
+			this.my_list[4].text = uni.$u.timeFormat(datas.userDate, 'yyyy-mm-dd')
+			this.my_list[5].text = datas.userIdcard
+			this.my_list[6].text = datas.userLocation + "号楼"
 			uni.request({
-				url: 'http://localhost:9999/user/image',
+				url: 'http://47.100.242.36:6001/user/image',
 				responseType: 'arraybuffer',
 				data: {
-					userImage:datas.userImage
+					userImage: datas.userImage
 				},
 				success: (res) => {
 					// console.log(res);
@@ -231,8 +313,8 @@
 						result, byte) => result + String.fromCharCode(byte), ''));
 					//微信小程序不支持btoa，所以可以用下面这个
 					//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
-			
-			
+
+
 				}
 			})
 		}

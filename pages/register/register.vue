@@ -220,7 +220,7 @@
 				}
 				else {
 					uni.request({
-						url: 'http://127.0.0.1:9999/' + 'register',
+						url: 'http://47.100.242.36:6001/' + 'register',
 						data: {
 							userId: this.form.userId,
 							userPassword: this.form.password,
