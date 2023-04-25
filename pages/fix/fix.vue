@@ -1,6 +1,6 @@
 <template>
 
-	<view >
+	<view>
 		<!-- 用户页面 -->
 		<view v-if="type===1">
 			<view style="background-color: #ffffff;margin-top: 15upx;">
@@ -24,8 +24,7 @@
 					</u-col>
 					<u-col span="9">
 						<view class="inputview">
-							<input class="form_style" type="number" maxlength="11" v-model="phone"
-								placeholder="请输入联系方式"></input>
+							<text style=" font-size: 35upx;margin-left: 15upx; font-weight:600">{{phone}}</text>
 						</view>
 					</u-col>
 				</u-row>
@@ -45,23 +44,24 @@
 						</uni-grid-item>
 					</uni-grid>
 				</view>
-			
+
 			</view>
-			
+
 			<view style="background-color: #ffffff;margin-top: 15upx;">
 				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">上传物品图片:</text>
 				<scroll-view style="padding-top:10px;" scroll-y="true" class="scroll-Y">
 					<view>
-						<u-upload class="upload" :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1"
-							multiple :maxCount="3" :previewFullImage="true" width="170" height="170">
-							<image src="../../static/fix/upload.png" mode="widthFix" style="width: 170upx;height: 170upx;">
+						<u-upload class="upload" :fileList="fileList1" @afterRead="afterRead" @delete="deletePic"
+							name="1" multiple :maxCount="3" :previewFullImage="true" width="170" height="170">
+							<image src="../../static/fix/upload.png" mode="widthFix"
+								style="width: 170upx;height: 170upx;">
 							</image>
 						</u-upload>
 					</view>
 				</scroll-view>
 			</view>
-			
-			
+
+
 			<view style="background-color: #ffffff;margin-top: 15upx;">
 				<view>
 					<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">描述:</text>
@@ -71,35 +71,33 @@
 						autoHeight></u--textarea>
 				</view>
 			</view>
-			
+
 			<view>
 				<button class="submit-btn" @click="submit">提交</button>
 			</view>
 			<view>
 				<u-toast ref="uToast" />
 			</view>
-			
-			
+
+
 			<view style="margin-top:200upx;">
-			
+
 			</view>
 		</view>
 		<!-- 管理员页面 -->
 		<view v-if="type===0">
 			<u-transition :show="transitionshow" mode="slide-up" duration="800">
 				<view>
-					<uni-card title="报修申请" v-for="(item, index) in 8" :key="index" :index="index"
+					<uni-card title="报修申请" v-for="(item, index) in fixList" :key="index" :index="index"
 						thumbnail="../../static/fix/fixapply.png" @click="clickcard(index)">
-						
-						<!-- <u-steps :current="item.fixState" dot>
-							<u-steps-item title="提交申请" ></u-steps-item>
-							<u-steps-item title="待完成" ></u-steps-item>
-							<u-steps-item title="已结单"></u-steps-item>
-						</u-steps> -->
+
 						<u-row style="background-color: #ffffff;height: 80upx;">
 							<u-col span="8">
-								<view>
-									<text>收到了一个报修申请</text>
+								<view v-if="fixList[index].fixState===0">
+									<text style="color: #57c248; font-size: 35upx">收到了一个报修申请</text>
+								</view>
+								<view v-if="fixList[index].fixState===1">
+									<text style="color: #7c7c7c; font-size: 35upx">已检修</text>
 								</view>
 							</u-col>
 							<u-col span="5">
@@ -107,34 +105,173 @@
 									<text>来自：{{item.userName}}</text>
 								</view>
 							</u-col>
-			
+
 						</u-row>
-			
+
 					</uni-card>
 				</view>
 				<view style="margin-top: 80upx;"></view>
-			
+
 			</u-transition>
+			<view>
+				<u-overlay :show="overlayshow" @click="overlayshow=false ,allimage=[]" opacity=0.7>
+					<view class="warp">
+
+						<view class="rect" @tap.stop>
+							<scroll-view style="height: 500px;" scroll-y="true" class="scroll-Y">
+								<!-- 名字Name -->
+								<u-row
+									style="background-color: #f5efff;height: 100upx;margin-top: 30upx;border-radius: 50upx;">
+									<u-col span="3">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">Name:</text>
+										</view>
+									</u-col>
+									<u-col span="5">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.name}}</text>
+										</view>
+									</u-col>
+								</u-row>
+
+								<!-- 联系方式 -->
+								<u-row
+									style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+									<u-col span="4">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">联系方式:</text>
+										</view>
+									</u-col>
+									<u-col span="8">
+										<view>
+											<text style="font-size: 35upx;margin-left: 20upx; ">{{pop.phone}}</text>
+										</view>
+									</u-col>
+								</u-row>
+
+								<!-- 状态State -->
+								<u-row
+									style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+									<u-col span="4">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">报修物品:</text>
+										</view>
+									</u-col>
+									<u-col span="5">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.fixname}}</text>
+										</view>
+									</u-col>
+								</u-row>
+								<!-- 图片 -->
+								<u-row
+									style="background-color: #f5efff;width: 25%; height: 95upx;margin-top: 10upx;border-radius: 50upx;">
+									<u-col>
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">图片:</text>
+										</view>
+									</u-col>
+
+								</u-row>
+								<view>
+									<uni-grid :column="3" :showBorder="false" :highlight="false">
+										<uni-grid-item class="grid-item2" style="width: 180upx; height: 180upx; "
+											v-for="(item,index) in allimage" :key="index">
+											<image :src=item mode="aspectFill" style="height: 180upx;width: 180upx;"
+												@click="clickImage(index)"></image>
+										</uni-grid-item>
+									</uni-grid>
+								</view>
+
+								<!-- 信息Message -->
+								<u-row
+									style="background-color: #f5efff;width: 25%; height: 95upx;margin-top: 30upx;border-radius: 50upx;">
+									<u-col>
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">备注:</text>
+										</view>
+									</u-col>
+
+								</u-row>
+								<!-- fixmessage -->
+								<view class="messagebody">
+									<uni-card style="border-radius: 50upx; background-color: #f5efff;"
+										:is-shadow="false">
+										<text
+											style="font-size: 40upx ;color: black;width:100%;display:inline-block;white-space: pre-wrap;word-wrap: break-word;height: auto;"
+											space="nbsp">{{pop.fixMessage}}</text>
+									</uni-card>
+								</view>
+
+							</scroll-view>
+							<!-- 按钮 -->
+							<view v-if="pop.state===0" style="flex: auto;">
+								<u-row style="background-color: aqua;">
+									<u-col span="6">
+										<view style="position: absolute; bottom: 190upx;margin-left: 50upx;">
+											<button class="buttonitem1" @click="reject(pop.id)">未完成</button>
+										</view>
+									</u-col>
+									<u-col span="6">
+										<view style="position: absolute; bottom: 190upx;margin-left: 30upx;">
+											<button class="buttonitem2" @click="agree(pop.id)">已检修</button>
+										</view>
+									</u-col>
+								</u-row>
+							</view>
+							<view v-if="pop.state===1" style="flex: auto;">
+								<view style="position: absolute; bottom: 190upx; width: 85%;">
+									<button class="buttonitem3" @click="overlayshow=false,allimage=[]">已检修</button>
+								</view>
+							</view>
+						</view>
+
+					</view>
+				</u-overlay>
+			</view>
 		</view>
-		
+
 
 		<tabBar :current="3"></tabBar>
 	</view>
 </template>
 
 <script>
+	import {
+		pathToBase64,
+		base64ToPath
+	} from 'image-tools'
 	export default {
+
 		data() {
 			return {
-				fixList:[],
+				test: "",
+				//管理员端数据
+				//宫格图片列表
+				allimage: [],
+				//图片api列表
+				FixImage: [],
+				overlayshow: false,
+				pop: {
+					id: '',
+					name: '',
+					phone: '',
+					fixname: '',
+					state: '0',
+					fixMessage: '无',
+				},
+				//报修列表
+				fixList: [],
+
+				//用户端数据
 				//动画
 				transitionshow: true,
 				//用户类型
-				type:2,
+				type: 2,
 				//选项框属性
 				select: 0,
 				describe: '',
-				beselect:'',
+				beselect: '',
 				//设置图片event
 				event_image: [],
 				name: '',
@@ -202,12 +339,125 @@
 
 		},
 		methods: {
+			reject(id) {
+				this.overlayshow = false
+				this.allimage=[]
+				
+			},
+			agree(id) {
+				this.overlayshow = false
+				this.allimage=[]
+			},
+			//管理员端列表图片点击
+			clickImage(index) {
+
+				console.log("点击图片：", index)
+
+				this.open(index)
+				// console.log(this.allimage[index])
+				
+			},
+			open(index) {
+
+				uni.previewImage({
+					urls: this.allimage, //需要预览的图片http链接列表，多张的时候，url直接写在后面就行了
+					current: index, // 当前显示图片的http链接，默认是第一个
+					indicator: "default",
+					success: function(res) {
+						console.log("点击图片成功")
+					},
+					fail: function(res) {
+						console.log("点击图片失败")
+					},
+					complete: function(res) {},
+
+
+				});
+			},
+			//管理员端页面列表点击
+			clickcard(index) {
+				console.log("点击")
+				this.pop.name = this.fixList[index].userName
+				this.pop.state = this.fixList[index].fixState
+				this.pop.fixname = this.fixList[index].fixName
+				this.pop.phone = this.fixList[index].userNumber
+				this.pop.id = this.fixList[index].fixId
+				if (this.fixList[index].fixMessage) {
+					this.pop.fixMessage = this.fixList[index].fixMessage
+				} else {
+					this.pop.fixMessage =
+						'无wuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhs无'
+				}
+				uni.request({
+
+					url: 'http://47.100.242.36:6001/' + 'fiximage/getImageList',
+					data: {
+						fixId: this.pop.id
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+
+						console.log("FixImage:", res.data.datas);
+
+						this.FixImage = res.data.datas
+						
+						if (this.FixImage !== null) {
+							for (var i = 0; i < this.FixImage.length; i++) {
+								this.getImage(this.FixImage[i].imagePic)
+							}
+
+						}
+					},
+					fail: (res) => {
+
+						this.FixImage = null
+					}
+
+				})
+
+				//最后显示
+				this.overlayshow = true
+
+			},
+			getImage(imagePic) {
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'fiximage/getFixImage',
+					responseType: 'arraybuffer',
+					data: {
+						fixImageId: imagePic
+					},
+					success: (res) => {
+						// console.log(res);
+						let result = res.data;
+						//我们所需要的数据
+						let i = 'data:image/png;base64,' + btoa(new Uint8Array(
+							result).reduce((
+							result, byte) => result + String.fromCharCode(byte), ''));
+						base64ToPath(i)
+							.then(path => {
+								console.log("path", path)
+								this.allimage.splice(this.allimage.length, 0, path)
+							})
+							.catch(error => {
+								console.error("error", error)
+							})
+						
+
+						//微信小程序不支持btoa，所以可以用下面这个
+						//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
+
+
+					}
+				})
+			},
+			//用户端页面点击
 			change(e) {
 				let {
 					index
 				} = e.detail
 
-				this.beselect=this.image_list[e.detail.index].name
+				this.beselect = this.image_list[e.detail.index].name
 				//背景颜色调整
 				if (this.image_list) {
 					this.image_list[index].class = "grid-item-color"
@@ -220,7 +470,7 @@
 						}
 					}
 					console.log(e.detail.index)
-					
+
 				}
 			},
 			showToast(Msg, Type) {
@@ -269,31 +519,31 @@
 				let result = ""
 				if (len > 0 && this.select === 1 && this.phone) {
 					//上传数据
-					let datas=uni.getStorageSync("info")
-					let uploadid=''
+					let datas = uni.getStorageSync("info")
+					let uploadid = ''
 					uni.request({
 						url: 'http://47.100.242.36:6001/' + 'fix/upload',
 						data: {
 							userId: datas.userId,
-							fixName:this.beselect,
-							fixState:0,
-							fixMessage:this.describe
+							fixName: this.beselect,
+							fixState: 0,
+							fixMessage: this.describe
 						},
 						method: "POST",
 						dataType: "json",
 						success: (res) => {
 							let uploadresult = res.data.code
 							console.log("id:", res.data.datas.fixId);
-							uploadid=res.data.datas.fixId;
+							uploadid = res.data.datas.fixId;
 							console.log("success:", uploadresult);
 							if (uploadresult === 200) {
 								this.showToast("提交成功", 'success')
 								//上传图片
 								for (let i = 0; i < len; i++) {
-									result = this.uploadFilePromise(this.event_image[i],uploadid)
+									result = this.uploadFilePromise(this.event_image[i], uploadid)
 									// console.log("result",result)
 								}
-								
+
 								setTimeout(() => {
 									this.refresh()
 								}, 1000);
@@ -309,9 +559,9 @@
 
 						}
 					})
-					
 
-					
+
+
 				} else {
 					this.showToast("请选择物品类型和联系方式", 'error')
 				}
@@ -322,19 +572,19 @@
 					url: '/pages/fix/fix'
 				})
 			},
-			uploadFilePromise(url,id) {
+			uploadFilePromise(url, id) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
 						url: 'http://47.100.242.36:6001/fiximage/image/upload', // 仅为示例，非真实的接口地址
 						filePath: url,
 						name: 'file',
 						formData: {
-							uploadid:id
+							uploadid: id
 						},
 
 						success: (res) => {
 							resolve(res)
-							console.log("成功", res);
+							console.log("上传成功", res);
 
 
 						},
@@ -350,15 +600,53 @@
 
 
 		},
-		onNavigationBarButtonTap(e) {
-			this.refresh();
-		},
+
 		onShow() {
+
 			let datas = uni.getStorageSync("info")
 			this.name = datas.userName
 			this.phone = datas.userNumber
-			this.type=datas.userType
-		}
+			this.type = datas.userType
+			if (this.type === 0) {
+				//显示报修列表
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'fix/search',
+					data: {
+
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+
+						console.log("success:", res);
+						this.fixList = res.data.datas;
+
+					},
+					fail: (res) => {
+
+
+					}
+				})
+
+			}
+
+		},
+		onPullDownRefresh() {
+			
+			uni.reLaunch({
+				url: '/pages/fix/fix'
+			})
+
+			uni.stopPullDownRefresh();
+		},
+		//物理返回按钮先返回到首页
+		onBackPress(options) {
+			
+			this.overlayshow = false;
+			this.allimage=[]
+			return true;
+			
+		},
 
 	}
 </script>
@@ -386,6 +674,7 @@
 		font-size: 35upx;
 		height: 82upx;
 		width: 500upx;
+		margin-top: 35upx;
 		border-radius: 20upx;
 	}
 
@@ -409,6 +698,7 @@
 		border-radius: 120upx;
 		border-color: #ffffff;
 	}
+
 
 	.grid-item-box {
 		flex: 1;
@@ -436,6 +726,13 @@
 		margin-top: 30upx;
 		margin-left: 55upx;
 		border-radius: 120upx;
+
+	}
+
+	.grid-item2 {
+		margin-top: 30upx;
+		margin-left: 20upx;
+
 
 	}
 
@@ -487,5 +784,59 @@
 		box-shadow: 0 0 10px #cdcdcd;
 		border-radius: 100px;
 
+	}
+
+	.warp {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+	}
+
+	.rect {
+		width: 340px;
+		height: 620px;
+		background-color: #fff;
+	}
+
+	.imagecenter {
+		display: flex;
+		margin: 0 auto;
+		margin-top: 20upx;
+
+
+	}
+
+	.messagebody {
+		width: 500upx;
+		margin-left: 140upx;
+		margin-top: -120upx;
+
+	}
+
+	.buttonitem1 {
+		height: 100upx;
+		width: 220upx;
+		border-radius: 40upx;
+		background-color: #ff8585;
+		font-size: 40upx;
+	}
+
+	.buttonitem2 {
+		height: 100upx;
+		width: 220upx;
+		border-radius: 40upx;
+		background-color: #55aaff;
+		font-size: 40upx;
+	}
+
+	.buttonitem3 {
+		height: 100upx;
+		width: 220upx;
+		border-radius: 40upx;
+		background-color: #61ff73;
+		justify-items: center;
+		align-items: center;
+		font-size: 40upx;
 	}
 </style>

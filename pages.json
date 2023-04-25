@@ -35,6 +35,7 @@
 		{
 			"path": "pages/travel/travel",
 			"style": {
+				"enablePullDownRefresh": true, //开启下拉刷新
 				"navigationBarTitleText": "码上禁"
 				// "app-plus": {"titleNView": false}
 			}
@@ -53,18 +54,19 @@
 		{
 			"path": "pages/fix/fix",
 			"style": {
-				"navigationBarTitleText": "码上禁",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "\ue8aa",
-							"fontSrc": "/static/fix/refresh/iconfont.ttf",
-							"fontSize": "25",
-							"float": "right"
+				"enablePullDownRefresh": true, //开启下拉刷新
+				"navigationBarTitleText": "码上禁"
+				// "app-plus": {
+				// 	"titleNView": {
+				// 		"buttons": [{
+				// 			"text": "\ue8aa",
+				// 			"fontSrc": "/static/fix/refresh/iconfont.ttf",
+				// 			"fontSize": "25",
+				// 			"float": "right"
 
-						}]
-					}
-				}
+				// 		}]
+				// 	}
+				// }
 			}
 		},
 

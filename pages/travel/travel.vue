@@ -4,8 +4,8 @@
 		<u-transition :show="transitionshow" mode="slide-left" duration="800">
 			<view>
 				<uni-card title="申请" v-for="(item, index) in applylist" :key="index" :index="index"
-					thumbnail="../../static/travel/apply.png" @click="clickcard(index)">
-					<u-steps :current="item.applyState"  dot>
+					thumbnail="../../static/travel/apply.png" @click="clickcard(index,item)">
+					<u-steps :current="item.applyState" dot>
 						<u-steps-item title="提交申请"></u-steps-item>
 						<u-steps-item title="待审批"></u-steps-item>
 						<u-steps-item title="已完成"></u-steps-item>
@@ -13,7 +13,7 @@
 					<u-row style="background-color: #ffffff;height: 80upx;">
 						<u-col span="8">
 							<view v-if="item.applyState===1">
-								<text style="color: #60d04c; font-size: 35upx">收到了一个申请</text>
+								<text style="color: #3c9cff; font-size: 35upx">收到了一个申请</text>
 							</view>
 							<view v-if="item.applyState===2">
 								<text style="color: #fc926b; font-size: 35upx">已完成</text>
@@ -140,6 +140,9 @@
 				</view>
 			</u-overlay>
 		</view>
+		<view>
+			<u-toast ref="uToast" />
+		</view>
 		<tabBar :current="1"></tabBar>
 	</view>
 </template>
@@ -165,8 +168,9 @@
 
 		},
 		methods: {
-			clickcard(index) {
+			clickcard(index, item) {
 				console.log("点击", index)
+				console.log("点击", item)
 				//获取单个数据 并单独获取申请者
 				uni.request({
 						url: 'http://47.100.242.36:6001/' + 'user/' + this.applylist[index].applyUser,
@@ -180,8 +184,13 @@
 							console.log("success:", res);
 							this.pop.name = res.data.userName
 							this.pop.userid = res.data.userId
-							this.pop.time = this.applylist[index].applyTime;
-							this.pop.applyMessage = this.applylist[index].applyMessage;
+							this.pop.time = uni.$u.timeFormat(this.applylist[index].applyTime,
+								'yyyy-mm-dd hh:MM:ss')
+							if (this.applylist[index].applyMessage) {
+								this.pop.applyMessage = this.applylist[index].applyMessage;
+							} else {
+								this.pop.applyMessage = '无'
+							}
 							this.pop.id = this.applylist[index].applyId;
 							if (this.applylist[index].applyState === 1) {
 								this.pop.state = "待审批"
@@ -192,7 +201,10 @@
 							this.overlayshow = true
 						},
 						fail: (res) => {
-
+							
+											
+							this.showToast("网络出错", 'error')
+							
 							console.log("fail:", res);
 						}
 					}),
@@ -220,14 +232,8 @@
 
 
 			},
-			reject(id) {
-				this.overlayshow = false
-				console.log("拒绝")
-			},
-			agree(id) {
-				this.overlayshow = false
-				console.log("同意")
-				//提交同意
+			submit() {
+				//提交apply同意
 				uni.request({
 					url: 'http://47.100.242.36:6001/' + 'apply/edit',
 					data: {
@@ -245,6 +251,77 @@
 
 
 					}
+				})
+			},
+			reject(id) {
+				this.overlayshow = false
+				console.log("拒绝")
+				this.submit()
+				this.pop.state = "已完成"
+				let that=this;
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'permit/add',
+					data: {
+						applyId: this.pop.id,
+						permitState: 0,
+						permitTime: uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss')
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+						uni.reLaunch({
+							url: '/pages/travel/travel'
+						})
+						console.log("permit:", res);
+						
+
+					},
+					fail: (res) => {
+
+						
+					}
+				})
+			},
+			agree(id) {
+				this.overlayshow = false
+				console.log("同意")
+				this.submit()
+				this.pop.state = "已完成"
+				let that=this;
+				//登记permit时间和状态
+				// let time=uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss')
+				// console.log("time",time)
+
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'permit/add',
+					data: {
+						applyId: this.pop.id,
+						permitState: 1,
+						permitTime: uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss')
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+
+						console.log("permit:", res);
+						uni.reLaunch({
+							url: '/pages/travel/travel'
+						})
+						
+
+					},
+					fail: (res) => {
+
+						
+					}
+				})
+			},
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
 				})
 			},
 			open() {
@@ -274,11 +351,13 @@
 				success: (res) => {
 
 					console.log("success:", res);
-					this.applylist = res.data.datas;
+					this.applylist = res.data.datas.All;
 
 				},
 				fail: (res) => {
-
+					
+						this.showToast("网络出错", 'error')
+					
 
 				}
 			})
@@ -287,6 +366,14 @@
 		onBackPress(options) {
 			this.overlayshow = false
 			return true;
+		},
+		onPullDownRefresh() {
+
+			uni.reLaunch({
+				url: '/pages/travel/travel'
+			})
+
+			uni.stopPullDownRefresh();
 		},
 	}
 </script>

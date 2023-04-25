@@ -20,7 +20,7 @@
 			return {
 				scrollTop: 0,
 				current: 0,
-				href: '../../static/home/ad1.jpg',
+				href: [],
 				image_list:[
 					{src: "../../static/home/ad1.jpg"},
 					{src: "../../static/home/ad2.jpg"},
@@ -33,7 +33,8 @@
 		},
 		methods: {
 			refresh() {
-				this.href = Math.random()
+				this.href.splice(this.href.length,0,"dk")
+				console.log(this.href)
 			}
 		},
 		onPullDownRefresh() {
