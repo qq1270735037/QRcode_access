@@ -226,7 +226,7 @@
 							userPassword: this.form.password,
 							userType: this.form.usertype,
 							userName:this.form.username,
-							userNumber:this.form.id,
+							userIdcard:this.form.id,
 						},
 						method: "POST",
 						dataType: "json",

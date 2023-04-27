@@ -1,7 +1,7 @@
 <template>
 
 	<view>
-		<u-transition :show="transitionshow" mode="slide-left" duration="800">
+		<u-transition :show="transitionshow" mode="fade-left" duration="800">
 			<view>
 				<uni-card title="申请" v-for="(item, index) in applylist" :key="index" :index="index"
 					thumbnail="../../static/travel/apply.png" @click="clickcard(index,item)">
@@ -37,85 +37,125 @@
 				<view class="warp">
 
 					<view class="rect" @tap.stop>
-						<!-- 头像 -->
-						<view>
-							<u-avatar class="imagecenter" :src="myImage" shape="circle" size="80px" mode="aspectFill"
-								default-url="../../static/home/ad1.jpg" @click="open"></u-avatar>
-						</view>
+						<scroll-view style="height: 500px;" scroll-y="true" class="scroll-Y">
+							<!-- 头像 -->
+							<view>
+								<u-avatar class="imagecenter" :src="myImage" shape="circle" size="80px"
+									mode="aspectFill" default-url="../../static/home/ad1.jpg" @click="open"></u-avatar>
+							</view>
 
-						<!-- 信息Name -->
-						<u-row style="background-color: #f5efff;height: 100upx;margin-top: 30upx;border-radius: 50upx;">
-							<u-col span="3">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">Name:</text>
-								</view>
-							</u-col>
-							<u-col span="5">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.name}}</text>
-								</view>
-							</u-col>
-						</u-row>
+							<!-- 信息Name -->
+							<u-row
+								style="background-color: #f5efff;height: 100upx;margin-top: 30upx;border-radius: 50upx;">
+								<u-col span="3">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">Name:</text>
+									</view>
+								</u-col>
+								<u-col span="5">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.name}}</text>
+									</view>
+								</u-col>
+							</u-row>
 
-						<!-- 信息ID -->
-						<u-row style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
-							<u-col span="1.8">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">ID:</text>
-								</view>
-							</u-col>
-							<u-col span="5">
-								<view>
-									<text style="font-size: 40upx ">{{pop.userid}}</text>
-								</view>
-							</u-col>
-						</u-row>
-						<!-- 信息Time -->
-						<u-row style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
-							<u-col span="4">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">申请时间:</text>
-								</view>
-							</u-col>
-							<u-col span="8">
-								<view>
-									<text style="font-size: 35upx;margin-left: 20upx; ">{{pop.time}}</text>
-								</view>
-							</u-col>
-						</u-row>
-						<!-- 信息State -->
-						<u-row style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
-							<u-col span="2.5">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">状态:</text>
-								</view>
-							</u-col>
-							<u-col span="5">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.state}}</text>
-								</view>
-							</u-col>
-						</u-row>
-						<!-- 信息Message -->
-						<u-row
-							style="background-color: #f5efff;width: 25%; height: 95upx;margin-top: 10upx;border-radius: 50upx;">
-							<u-col>
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">备注:</text>
-								</view>
-							</u-col>
+							<!-- 信息ID -->
+							<u-row
+								style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+								<u-col span="1.8">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">ID:</text>
+									</view>
+								</u-col>
+								<u-col span="5">
+									<view>
+										<text style="font-size: 40upx ">{{pop.userid}}</text>
+									</view>
+								</u-col>
+							</u-row>
+							<!-- 信息Time -->
+							<u-row
+								style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+								<u-col span="4">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">申请时间:</text>
+									</view>
+								</u-col>
+								<u-col span="8">
+									<view>
+										<text style="font-size: 35upx;margin-left: 20upx; ">{{pop.time}}</text>
+									</view>
+								</u-col>
+							</u-row>
+							<!-- 信息State -->
+							<u-row
+								style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+								<u-col span="2.5">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">状态:</text>
+									</view>
+								</u-col>
+								<u-col span="5">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.state}}</text>
+									</view>
+								</u-col>
+							</u-row>
+							<!-- 信息Message -->
+							<u-row
+								style="background-color: #f5efff;width: 25%; height: 95upx;margin-top: 10upx;border-radius: 50upx;">
+								<u-col>
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">备注:</text>
+									</view>
+								</u-col>
 
-							<!-- <u-col span="5">
-								<view>
-									<text style="font-size: 40upx;margin-left: 20upx; ">通过</text>
-								</view>
-							</u-col> -->
-						</u-row>
-						<view class="messagebody">
-							<uni-card style="border-radius: 50upx; background-color: #f5efff;" :is-shadow="false">
-								<text style="font-size: 40upx ;color: black;">{{pop.applyMessage}}</text>
-							</uni-card>
-						</view>
+								<!-- <u-col span="5">
+									<view>
+										<text style="font-size: 40upx;margin-left: 20upx; ">通过</text>
+									</view>
+								</u-col> -->
+							</u-row>
+							<view class="messagebody">
+								<uni-card style="border-radius: 50upx; background-color: #f5efff;" :is-shadow="false">
+									<text style="font-size: 40upx ;color: black;">{{pop.applyMessage}}</text>
+								</uni-card>
+							</view>
+							<view v-if="pop.state==='已完成'">
+								<!-- 审批时间 -->
+								<u-row
+									style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+									<u-col span="4">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">审批时间:</text>
+										</view>
+									</u-col>
+									<u-col span="8">
+										<view>
+											<text
+												style="font-size: 35upx;margin-left: 20upx; ">{{pop.permittime}}</text>
+										</view>
+									</u-col>
+								</u-row>
+								<!-- 审批状态 -->
+								<u-row
+									style="background-color: #f5efff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+									<u-col span="4">
+										<view>
+											<text style="font-size: 40upx;margin-left: 20upx; ">审批状态:</text>
+										</view>
+									</u-col>
+									<u-col span="8">
+										<view>
+											<text
+												style="font-size: 35upx;margin-left: 20upx; ">{{pop.permitstate}}</text>
+										</view>
+									</u-col>
+								</u-row>
+							</view>
+						</scroll-view>
+
+
 						<view v-if="pop.state==='待审批'" style="flex: auto;">
 							<u-row style="background-color: aqua;">
 								<u-col span="6">
@@ -152,6 +192,7 @@
 		data() {
 			return {
 				// message:'da6d56',
+				permit: [],
 				myImage: '',
 				applylist: [],
 				overlayshow: false,
@@ -162,7 +203,9 @@
 					time: '',
 					state: '',
 					applyMessage: '',
-					userid: ''
+					userid: '',
+					permittime: '',
+					permitstate: ''
 				}
 			}
 
@@ -198,13 +241,26 @@
 							if (this.applylist[index].applyState === 2) {
 								this.pop.state = "已完成"
 							}
+							for (var i = 0; i < this.permit.length; i++) {
+								
+								if(this.permit[i].applyId===this.pop.id){
+									this.pop.permittime=this.permit[i].permitTime
+									console.log("apply:", this.permit[i].permitTime);
+									if (this.permit[i].permitState === 0) {
+										this.pop.permitstate = "已拒绝"
+									}
+									if (this.permit[i].permitState === 1) {
+										this.pop.permitstate = "已同意"
+									}
+								}
+							}
 							this.overlayshow = true
 						},
 						fail: (res) => {
-							
-											
+
+
 							this.showToast("网络出错", 'error')
-							
+
 							console.log("fail:", res);
 						}
 					}),
@@ -228,6 +284,7 @@
 
 						}
 					})
+
 
 
 
@@ -258,7 +315,7 @@
 				console.log("拒绝")
 				this.submit()
 				this.pop.state = "已完成"
-				let that=this;
+				let that = this;
 				uni.request({
 					url: 'http://47.100.242.36:6001/' + 'permit/add',
 					data: {
@@ -273,12 +330,12 @@
 							url: '/pages/travel/travel'
 						})
 						console.log("permit:", res);
-						
+
 
 					},
 					fail: (res) => {
 
-						
+
 					}
 				})
 			},
@@ -287,7 +344,7 @@
 				console.log("同意")
 				this.submit()
 				this.pop.state = "已完成"
-				let that=this;
+				let that = this;
 				//登记permit时间和状态
 				// let time=uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss')
 				// console.log("time",time)
@@ -307,12 +364,12 @@
 						uni.reLaunch({
 							url: '/pages/travel/travel'
 						})
-						
+
 
 					},
 					fail: (res) => {
 
-						
+
 					}
 				})
 			},
@@ -350,14 +407,35 @@
 				dataType: "json",
 				success: (res) => {
 
-					console.log("success:", res);
+					console.log("success:", res.data.datas.All);
 					this.applylist = res.data.datas.All;
 
 				},
 				fail: (res) => {
-					
-						this.showToast("网络出错", 'error')
-					
+
+					this.showToast("网络出错", 'error')
+
+
+				}
+			})
+			//显示申请状态
+			uni.request({
+				url: 'http://47.100.242.36:6001/' + 'permit/searchPermit',
+				data: {
+
+				},
+				method: "GET",
+				dataType: "json",
+				success: (res) => {
+
+					console.log("permit:", res);
+					this.permit = res.data
+
+				},
+				fail: (res) => {
+
+					this.showToast("网络出错", 'error')
+
 
 				}
 			})

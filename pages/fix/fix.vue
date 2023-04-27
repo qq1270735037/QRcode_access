@@ -86,7 +86,7 @@
 		</view>
 		<!-- 管理员页面 -->
 		<view v-if="type===0">
-			<u-transition :show="transitionshow" mode="slide-up" duration="800">
+			<u-transition :show="transitionshow" mode="fade-left" duration="800">
 				<view>
 					<uni-card title="报修申请" v-for="(item, index) in fixList" :key="index" :index="index"
 						thumbnail="../../static/fix/fixapply.png" @click="clickcard(index)">
@@ -347,6 +347,28 @@
 			agree(id) {
 				this.overlayshow = false
 				this.allimage=[]
+				uni.request({
+				
+					url: 'http://47.100.242.36:6001/' + 'fix',
+					data: {
+						fixId: this.pop.id,
+						fixState:1
+					},
+					method: "PUT",
+					dataType: "json",
+					success: (res) => {
+				
+						console.log("fix success:", res);
+						this.refresh()
+						
+						
+					},
+					fail: (res) => {
+				
+						
+					}
+				
+				})
 			},
 			//管理员端列表图片点击
 			clickImage(index) {
@@ -386,7 +408,7 @@
 					this.pop.fixMessage = this.fixList[index].fixMessage
 				} else {
 					this.pop.fixMessage =
-						'无wuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhskwuwuwuwuwuwuwuuwvjhs无'
+						'无'
 				}
 				uni.request({
 
@@ -399,7 +421,7 @@
 					success: (res) => {
 
 						console.log("FixImage:", res.data.datas);
-
+						
 						this.FixImage = res.data.datas
 						
 						if (this.FixImage !== null) {

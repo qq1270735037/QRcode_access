@@ -146,7 +146,43 @@
 
 		}
 
-	],
+	    ,{
+            "path" : "pages/applyrecord/applyrecord",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/fixrecord/fixrecord",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "报修记录"
+                
+            }
+            
+        }
+        ,{
+            "path" : "pages/fixInfo/fixInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/applyInfo/applyInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 
 	"tabBar": {
 		"custom": true,

@@ -1,64 +1,72 @@
 <template>
 
 	<view>
-
-		<view>
-			<u-row style="background-color: #ffffff;height: 220upx;">
-				<u-col span="3">
-					<view style="margin-left: 20upx;">
-						<u-avatar :src="myImage" shape="circle" size="80px" mode="aspectFill"
-							default-url="../../static/home/ad2.jpg" @click="open"></u-avatar>
-					</view>
-				</u-col>
-				<u-col span="7">
-					<view>
-						<view>
-							<text style="font-size: 40upx;margin-left: 20upx; font-weight:600">{{name}}</text>
-						</view>
-						<view style="margin-top: 30upx;">
-							<text style="font-size: 40upx;margin-left: 20upx;color:#7e7e7e">ID:{{id}}</text>
-						</view>
-
-					</view>
-				</u-col>
-				<u-col span="2">
-					<view @click="detail">
-						<image src="../../static/my/code.png" style="width: 50upx;height: 50upx;margin-left: 20px;">
-						</image>
-
-					</view>
-				</u-col>
-			</u-row>
-		</view>
-		<view style="padding-top: 30upx;" v-show="flag1">
-			<u-row style="height: 110upx; background-color: #ffffff;margin-top:3upx" v-for="(item, index) in my_list"
-				:index="index" :key="index" @click="select_cell(item.select)">
-				<u-col span="2">
-					<view style="display: flex;">
-						<image :src="item.src" style="height: 40upx;width: 40upx;margin-left: 50upx;"></image>
-					</view>
-				</u-col>
-				<u-col span="8">
-					<view style="margin-top: -5upx; ">
-						<text style="font-size: 35upx; font-weight:400">{{item.name}}</text>
-					</view>
-				</u-col>
-				<u-col span="2" style="display: flex;background-color: #ffffff;">
-					<view style="margin:0 auto; display: flex;">
-						<image src="../../static/my/right.png" style="width: 40upx;height: 40upx;margin-left: 20px;">
-						</image>
-					</view>
-				</u-col>
-			</u-row>
+	
+		<u-transition :show="transitionshow" mode="fade-left" duration="800">
 			<view>
-				<!-- 提示窗示例 -->
-				<uni-popup ref="alertDialog" type="dialog">
-					<uni-popup-dialog type="warn" cancelText="取消" confirmText="确定" title="确定退出登录" content=""
-						@confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
-				</uni-popup>
+				<u-row style="background-color: #ffffff;height: 220upx;">
+					<u-col span="3">
+						<view style="margin-left: 20upx;">
+							<u-avatar :src="myImage" shape="circle" size="80px" mode="aspectFill"
+								default-url="../../static/home/ad2.jpg" @click="open"></u-avatar>
+						</view>
+					</u-col>
+					<u-col span="7">
+						<view>
+							<view>
+								<text style="font-size: 40upx;margin-left: 20upx; font-weight:600">{{name}}</text>
+							</view>
+							<view style="margin-top: 30upx;">
+								<text style="font-size: 40upx;margin-left: 20upx;color:#7e7e7e">ID:{{id}}</text>
+							</view>
+			
+						</view>
+					</u-col>
+					<u-col span="2">
+						<view @click="detail">
+							<image src="../../static/my/code.png" style="width: 50upx;height: 50upx;margin-left: 20px;">
+							</image>
+			
+						</view>
+					</u-col>
+				</u-row>
 			</view>
-
-		</view>
+		
+		</u-transition>
+		
+		<u-transition :show="transitionshow" mode="fade-right" duration="800">
+			<view style="padding-top: 30upx;" v-show="flag1">
+				<u-row style="height: 110upx; background-color: #ffffff;margin-top:3upx" v-for="(item, index) in my_list"
+					:index="index" :key="index" @click="select_cell(item.select)">
+					<u-col span="2">
+						<view style="display: flex;">
+							<image :src="item.src" style="height: 40upx;width: 40upx;margin-left: 50upx;"></image>
+						</view>
+					</u-col>
+					<u-col span="8">
+						<view style="margin-top: -5upx; ">
+							<text style="font-size: 35upx; font-weight:400">{{item.name}}</text>
+						</view>
+					</u-col>
+					<u-col span="2" style="display: flex;background-color: #ffffff;">
+						<view style="margin:0 auto; display: flex;">
+							<image src="../../static/my/right.png" style="width: 40upx;height: 40upx;margin-left: 20px;">
+							</image>
+						</view>
+					</u-col>
+				</u-row>
+				<view>
+					<!-- 提示窗示例 -->
+					<uni-popup ref="alertDialog" type="dialog">
+						<uni-popup-dialog type="warn" cancelText="取消" confirmText="确定" title="确定退出登录" content=""
+							@confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
+					</uni-popup>
+				</view>
+			
+			</view>
+		
+		</u-transition>
+		
 
 		<tabBar :current="4"></tabBar>
 	</view>
@@ -68,7 +76,7 @@
 	export default {
 		data() {
 			return {
-
+				transitionshow:true,
 				flag1: true,
 				myImage: "../../static/home/ad3.jpg",
 				name: "高富帅",

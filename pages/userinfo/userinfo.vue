@@ -1,56 +1,60 @@
 <template>
 
 	<view>
-		<!-- 头像部分 -->
-		<view style="margin-top: 15upx;">
-			<u-row style="background-color: #ffffff;height: 155upx;">
-				<u-col span="9" @click="userImage">
-					<view style="margin-left: 20upx;">
-						<text class="imagetext">头像</text>
-					</view>
-				</u-col>
-				<u-col span="2">
-					<view>
-						<u-avatar :src="myImage" shape="circle" size="120upx" mode="aspectFill"
-							default-url="../../static/home/ad2.jpg" @click="open"></u-avatar>
-					</view>
-				</u-col>
-				<u-col span="1" @click="userImage">
-					<view style="margin:0 auto; display: flex; height: 155upx;">
-						<image style="margin-top: 55upx;" class="image" src="../../static/my/right.png"></image>
-					</view>
-				</u-col>
-			</u-row>
-		</view>
-		<!-- 详细信息部分 -->
-		<view>
-			<u-row class="list" v-for="(item, index) in my_list" :index="index" :key="index"
-				@click="select_cell(item.select)">
-				<u-col span="3">
-					<view style="margin-left: 20upx;">
-						<text style="font-size: 35upx; font-weight:400">{{item.name}}</text>
-					</view>
-				</u-col>
-				<u-col span="8">
-					<text
-						style="font-size: 35upx; font-weight:400;  text-align:right; background-color: #ffffff;">{{item.text}}</text>
-				</u-col>
-				<u-col span="1" style="display: flex;">
-					<view style="margin:0 auto; display: flex;">
-						<image class="image" src="../../static/my/right.png"></image>
-					</view>
-				</u-col>
-			</u-row>
-		</view>
-		<view>
-			<u-datetime-picker :show="showdate" :minDate="-2209017943000" :maxDate="maxdate" visibleItemCount=6 itemHeight=88 v-model="datepicker"
-				mode="date" @confirm="dateconfirm" @cancel="datecancel"></u-datetime-picker>
-			<u-picker :show="locationshow" visibleItemCount=4 itemHeight=120 :columns="location"
-				@confirm="locationconfirm" @cancel="locationcancel"></u-picker>
-		</view>
-		<view>
-			<u-toast ref="uToast" />
-		</view>
+		<u-transition :show="transitionshow" mode="slide-up" duration="500">
+			<!-- 头像部分 -->
+			<view style="margin-top: 15upx;">
+				<u-row style="background-color: #ffffff;height: 155upx;">
+					<u-col span="9" @click="userImage">
+						<view style="margin-left: 20upx;">
+							<text class="imagetext">头像</text>
+						</view>
+					</u-col>
+					<u-col span="2">
+						<view>
+							<u-avatar :src="myImage" shape="circle" size="120upx" mode="aspectFill"
+								default-url="../../static/home/ad2.jpg" @click="open"></u-avatar>
+						</view>
+					</u-col>
+					<u-col span="1" @click="userImage">
+						<view style="margin:0 auto; display: flex; height: 155upx;">
+							<image style="margin-top: 55upx;" class="image" src="../../static/my/right.png"></image>
+						</view>
+					</u-col>
+				</u-row>
+			</view>
+			<!-- 详细信息部分 -->
+			<view>
+				<u-row class="list" v-for="(item, index) in my_list" :index="index" :key="index"
+					@click="select_cell(item.select)">
+					<u-col span="3">
+						<view style="margin-left: 20upx;">
+							<text style="font-size: 35upx; font-weight:400">{{item.name}}</text>
+						</view>
+					</u-col>
+					<u-col span="8">
+						<text
+							style="font-size: 35upx; font-weight:400;  text-align:right; background-color: #ffffff;">{{item.text}}</text>
+					</u-col>
+					<u-col span="1" style="display: flex;">
+						<view style="margin:0 auto; display: flex;">
+							<image class="image" src="../../static/my/right.png"></image>
+						</view>
+					</u-col>
+				</u-row>
+			</view>
+			<view>
+				<u-datetime-picker :show="showdate" :minDate="-2209017943000" :maxDate="maxdate" visibleItemCount=6
+					itemHeight=88 v-model="datepicker" mode="date" @confirm="dateconfirm"
+					@cancel="datecancel"></u-datetime-picker>
+				<u-picker :show="locationshow" visibleItemCount=4 itemHeight=120 :columns="location"
+					@confirm="locationconfirm" @cancel="locationcancel"></u-picker>
+			</view>
+			<view>
+				<u-toast ref="uToast" />
+			</view>
+		</u-transition>
+
 	</view>
 </template>
 
@@ -58,6 +62,7 @@
 	export default {
 		data() {
 			return {
+				transitionshow: true,
 				maxdate: new Date().getTime(),
 				location: [
 					['1号楼', '2号楼', '3号楼', '4号楼', '5号楼', '6号楼', '7号楼']
@@ -192,7 +197,7 @@
 				this.my_list[4].text = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
 
 				let datas = uni.getStorageSync("info")
-				
+
 				uni.request({
 					url: 'http://47.100.242.36:6001/user/edit',
 					data: {
@@ -210,7 +215,7 @@
 							this.showToast("修改成功", 'success')
 							setTimeout(() => {
 
-								
+
 							}, 1000);
 						}
 						if (result === 100) {
@@ -244,7 +249,7 @@
 					url: 'http://47.100.242.36:6001/user/edit',
 					data: {
 						userId: datas.userId,
-						userLocation: e.indexs[0]+1
+						userLocation: e.indexs[0] + 1
 					},
 					method: "POST",
 					dataType: "json",
@@ -253,12 +258,12 @@
 						console.log("success:", res);
 						uni.setStorageSync('info', res.data.datas)
 						let datas = uni.getStorageSync("info")
-						this.my_list[6].text=datas.userLocation+"号楼"
+						this.my_list[6].text = datas.userLocation + "号楼"
 						if (result === 200) {
 							this.showToast("修改成功", 'success')
 							setTimeout(() => {
 
-							
+
 							}, 1000);
 						}
 						if (result === 100) {
@@ -288,7 +293,7 @@
 			// 	})
 			// },
 		},
-	
+
 		onShow() {
 			let datas = uni.getStorageSync("info")
 			this.my_list[0].text = datas.userName
