@@ -28,27 +28,53 @@
 					</view>
 				</u-col>
 			</u-row>
-
-			<!-- 状态State -->
+			<!-- 身份证 -->
 			<u-row style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
 				<u-col span="2">
 					<view>
-						<text  style="font-size: 40upx;margin-left: 20upx; ">状态:</text>
+						<text style="font-size: 40upx;margin-left: 20upx; ">证件:</text>
 					</view>
 				</u-col>
 				<u-col span="5">
 					<view>
-						<text v-if="pop.applyState===1" style="font-size: 40upx;margin-left: 20upx; ">待审核</text>
+						<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.userIdcard}}</text>
+					</view>
+				</u-col>
+			</u-row>
+			<!-- 申请时间 -->
+			<u-row style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+				<u-col span="3.5">
+					<view>
+						<text style="font-size: 40upx;margin-left: 20upx; ">申请时间:</text>
+					</view>
+				</u-col>
+				<u-col span="8">
+					<view>
+						<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.applyTime}}</text>
+					</view>
+				</u-col>
+			</u-row>
+			<!-- 状态State -->
+			<u-row style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+				<u-col span="2">
+					<view>
+						<text style="font-size: 40upx;margin-left: 20upx; ">状态:</text>
+					</view>
+				</u-col>
+				<u-col span="5">
+					<view>
+						<text v-if="pop.applyState===1" style="font-size: 40upx;margin-left: 20upx;color: #d44300; ">待审核</text>
 					</view>
 					<view>
 						<text v-if="pop.applyState===2" style="font-size: 40upx;margin-left: 20upx; ">已审核</text>
 					</view>
 				</u-col>
 			</u-row>
-			
+
 
 			<!-- 审批 -->
-			<u-row v-if="pop.permitState!==null" style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+			<u-row v-if="pop.permitState!==null"
+				style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
 				<u-col span="3.5">
 					<view>
 						<text style="font-size: 40upx;margin-left: 20upx; ">审批状态:</text>
@@ -56,16 +82,18 @@
 				</u-col>
 				<u-col span="8">
 					<view>
-						<text v-if="pop.permitState===0" style="font-size: 40upx;margin-left: 20upx; color: #d44300;">已拒绝</text>
+						<text v-if="pop.permitState===0"
+							style="font-size: 40upx;margin-left: 20upx; color: #d44300;">已拒绝</text>
 					</view>
 					<view>
 						<text v-if="pop.permitState===1" style="font-size: 40upx;margin-left: 20upx;  ">已通过</text>
 					</view>
 				</u-col>
 			</u-row>
-			
+
 			<!-- 审批时间 -->
-			<u-row v-if="pop.permitState!==null" style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
+			<u-row v-if="pop.permitState!==null"
+				style="background-color: #ffffff;height: 100upx;margin-top: 10upx;border-radius: 50upx;">
 				<u-col span="3.5">
 					<view>
 						<text style="font-size: 40upx;margin-left: 20upx; ">审批时间:</text>
@@ -73,17 +101,17 @@
 				</u-col>
 				<u-col span="8">
 					<view>
-						<text  style="font-size: 40upx;margin-left: 20upx; ">{{pop.permitTime}}</text>
+						<text style="font-size: 40upx;margin-left: 20upx; ">{{pop.permitTime}}</text>
 					</view>
-					
+
 				</u-col>
 			</u-row>
-			
-			
-			
+
+
+
 		</scroll-view>
 		<!-- 按钮 -->
-		<view v-if="pop.applyState===1" style="flex: auto; ">
+		<view v-if="pop.applyState===1&&type===0" style="flex: auto; ">
 			<u-row style="background-color: aqua;">
 				<u-col span="4.5">
 
@@ -99,19 +127,21 @@
 		<view v-if="pop.applyState===2" style="flex: auto; ">
 			<u-row style="background-color: aqua;">
 				<u-col span="5">
-		
+
 				</u-col>
 				<u-col v-if="pop.permitState===1">
 					<view style="position: absolute; bottom: 50upx;">
-						<image src="../../static/fix/success.png" mode="aspectFill" style="width: 120upx; height: 120upx;"></image>
+						<image src="../../static/fix/success.png" mode="aspectFill"
+							style="width: 120upx; height: 120upx;"></image>
 					</view>
 				</u-col>
 				<u-col v-if="pop.permitState===0">
 					<view style="position: absolute; bottom: 50upx;">
-						<image src="../../static/fix/false.png" mode="aspectFill" style="width: 120upx; height: 120upx;"></image>
+						<image src="../../static/fix/false.png" mode="aspectFill"
+							style="width: 120upx; height: 120upx;"></image>
 					</view>
 				</u-col>
-		
+
 			</u-row>
 		</view>
 
@@ -126,8 +156,7 @@
 	export default {
 		data() {
 			return {
-				FixImage: [],
-				allimage: [],
+				type:'',
 				pop: {
 					id: '',
 					name: '',
@@ -135,6 +164,7 @@
 					fixname: '',
 					state: 0,
 					fixMessage: '',
+					idcard:'',
 				},
 			}
 		},
@@ -143,23 +173,26 @@
 				uni.reLaunch({
 					url: '/pages/travel/travel'
 				})
-				
-				
+
+
 			},
 
-			
+
 		},
 		onLoad: function(option) {
+			let datas = uni.getStorageSync("info")
+			
+			this.type = datas.userType
 			if (option) {
 				this.pop = JSON.parse(decodeURIComponent(option.item));
 				// this.pop=option
-				console.log("option",option.item)
-				
+				console.log("option", option.item)
+
 			}
-			
+
 		},
-		
-		
+
+
 	}
 </script>
 
@@ -178,10 +211,11 @@
 		background-color: #aaff00;
 		font-size: 40upx;
 	}
-	.grid-item{
+
+	.grid-item {
 		margin-top: 30upx;
 		margin-left: 50upx;
-	
-	
+
+
 	}
 </style>

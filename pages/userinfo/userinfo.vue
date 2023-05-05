@@ -59,6 +59,10 @@
 </template>
 
 <script>
+	import {
+		pathToBase64,
+		base64ToPath
+	} from 'image-tools'
 	export default {
 		data() {
 			return {
@@ -87,32 +91,38 @@
 
 					},
 					{
+						name: "身份",
+						text: "",
+						select: 2,
+
+					},
+					{
 						name: "性别",
 						text: "女",
-						select: 2,
+						select: 3,
 						url: "pages/changegender/changegender"
 					},
 					{
 						name: "联系方式",
 						text: "18888888888",
-						select: 3,
+						select: 4,
 						url: "pages/changephone/changephone"
 					},
 					{
 						name: "生日",
 						text: "2000-11-11",
-						select: 4,
+						select: 5,
 					},
 					{
 						name: "身份证",
 						text: "353232323256565656",
-						select: 5,
+						select: 6,
 						url: "pages/changecard/changecard"
 					},
 					{
 						name: "楼栋号",
 						text: "2",
-						select: 6
+						select: 7
 					},
 
 				],
@@ -132,6 +142,90 @@
 			userImage() {
 				console.log("点击了头像")
 
+
+				uni.chooseImage({
+
+					count: 1, // 头像上传1张
+
+					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+
+					sourceType: ['album'], // 从相册选择
+
+					success: async (chooseImageRes) => {
+
+						const tempFilePaths = chooseImageRes.tempFilePaths;
+						this.uploadFilePromise(tempFilePaths[0], this.my_list[1].text)
+
+
+
+
+					}
+
+				})
+
+
+
+			},
+			uploadFilePromise(url, id) {
+				return new Promise((resolve, reject) => {
+					const uploadTask = uni.uploadFile({
+						url: 'http://47.100.242.36:6001/user/image/upload', // 仅为示例，非真实的接口地址
+						filePath: url,
+						name: 'file',
+						formData: {
+							uploadid: id
+						},
+
+						success: (res) => {
+
+							let datas = uni.getStorageSync("info")
+
+							uni.request({
+								url: 'http://47.100.242.36:6001/user/edit',
+								data: {
+									userId: datas.userId,
+									userImage: res.data
+								},
+								method: "POST",
+								dataType: "json",
+								success: (res) => {
+									let result = res.data.code
+									console.log("success:", res);
+									uni.setStorageSync('info', res.data.datas)
+
+									if (result === 200) {
+										this.showToast("修改成功", 'success')
+
+									}
+									if (result === 100) {
+										this.showToast("修改失败", 'error')
+
+									}
+
+
+								},
+								fail: (res) => {
+									console.log(res);
+									uni.hideLoading();
+									this.showToast("网络错误", 'error')
+								}
+							})
+
+
+
+							resolve(res)
+							console.log("上传成功", res);
+
+
+						},
+						fail: (err) => {
+							reject(err)
+							console.warn("失败", err);
+
+
+						},
+					});
+				})
 			},
 			open() {
 
@@ -160,10 +254,7 @@
 						});
 						break;
 					case 2:
-						uni.navigateTo({
-							url: url,
-
-						});
+						
 						break;
 					case 3:
 						uni.navigateTo({
@@ -172,15 +263,21 @@
 						});
 						break;
 					case 4:
-						this.showdate = true
-						break;
-					case 5:
 						uni.navigateTo({
 							url: url,
-
+						
 						});
 						break;
+					case 5:
+						this.showdate = true
+						break;
 					case 6:
+						uni.navigateTo({
+							url: url,
+						
+						});
+						break;
+					case 7:
 						this.locationshow = true
 						break;
 					default:
@@ -194,7 +291,7 @@
 			},
 			dateconfirm(e) {
 				console.log("ok", uni.$u.timeFormat(e.value, 'yyyy-mm-dd'))
-				this.my_list[4].text = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
+				this.my_list[5].text = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
 
 				let datas = uni.getStorageSync("info")
 
@@ -202,7 +299,7 @@
 					url: 'http://47.100.242.36:6001/user/edit',
 					data: {
 						userId: datas.userId,
-						userDate: this.my_list[4].text
+						userDate: this.my_list[5].text
 					},
 					method: "POST",
 					dataType: "json",
@@ -258,7 +355,8 @@
 						console.log("success:", res);
 						uni.setStorageSync('info', res.data.datas)
 						let datas = uni.getStorageSync("info")
-						this.my_list[6].text = datas.userLocation + "号楼"
+
+						this.my_list[7].text = datas.userLocation + "号楼"
 						if (result === 200) {
 							this.showToast("修改成功", 'success')
 							setTimeout(() => {
@@ -298,30 +396,28 @@
 			let datas = uni.getStorageSync("info")
 			this.my_list[0].text = datas.userName
 			this.my_list[1].text = datas.userId
-			this.my_list[2].text = datas.userGender
-			this.my_list[3].text = datas.userNumber
-			this.my_list[4].text = uni.$u.timeFormat(datas.userDate, 'yyyy-mm-dd')
-			this.my_list[5].text = datas.userIdcard
-			this.my_list[6].text = datas.userLocation + "号楼"
-			uni.request({
-				url: 'http://47.100.242.36:6001/user/image',
-				responseType: 'arraybuffer',
-				data: {
-					userImage: datas.userImage
-				},
-				success: (res) => {
-					// console.log(res);
-					let result = res.data;
-					//我们所需要的数据
-					this.myImage = 'data:image/png;base64,' + btoa(new Uint8Array(
-						result).reduce((
-						result, byte) => result + String.fromCharCode(byte), ''));
-					//微信小程序不支持btoa，所以可以用下面这个
-					//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
+			if (datas.userType === 0) {
+				this.my_list[2].text = "管理员"
 
+			}
+			if (datas.userType === 1) {
+				this.my_list[2].text = "业主/租户"
 
-				}
-			})
+			}
+			if (datas.userType === 2) {
+				this.my_list[2].text = "游客"
+
+			}
+			this.my_list[3].text = datas.userGender
+			this.my_list[4].text = datas.userNumber
+			this.my_list[5].text = uni.$u.timeFormat(datas.userDate, 'yyyy-mm-dd')
+			this.my_list[6].text = datas.userIdcard
+			if (datas.userLocation) {
+				this.my_list[7].text = datas.userLocation + "号楼"
+			} else {
+				this.my_list[7].text = ""
+			}
+			this.myImage = datas.userImage
 		}
 
 

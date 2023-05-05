@@ -1,6 +1,7 @@
 {
 	"easycom": {
-		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
+		"^nx-(.*)": "@/components/nx-$1/nx-$1.vue"
 	},
 
 	"pages": [{
@@ -42,7 +43,7 @@
 		},
 
 		{
-			"path": "pages/index1/index",
+			"path": "pages/scanCode/scanCode",
 			"style": {
 				"title-icon": "../../static/tabbar/fix-fill.png",
 				"navigationBarTitleText": "码上禁"
@@ -150,7 +151,7 @@
             "path" : "pages/applyrecord/applyrecord",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "申请记录",
                 "enablePullDownRefresh": false
             }
             
@@ -177,6 +178,79 @@
             "path" : "pages/applyInfo/applyInfo",
             "style" :                                                                                    
             {
+                "navigationBarTitleText": "详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/selfrecord/selfrecord",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/allrecord/allrecord",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/manage/manage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "人员管理",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/personInfo/personInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/setting/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        
+        ,{
+            "path" : "pages/qrcode/qrcode",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/scan/scan",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/ads/ads",
+            "style" :                                                                                    
+            {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
@@ -197,7 +271,7 @@
 
 			}, {
 
-				"pagePath": "pages/index1/index"
+				"pagePath": "pages/scanCode/scanCode"
 
 			}, {
 

@@ -1,20 +1,20 @@
 <template>
 
 	<view>
-		
+
 		<view>
 			<u-transition :show="transitionshow" mode="fade-down" duration="500">
 				<view>
 					<swiper class="swiper-item" indicator-dots=true autoplay=true interval="8000" circular>
 						<swiper-item v-for="(item,index) in image_list" :key="index">
-							<image class="swiper-image" :src="item.src"></image>
+							<image class="swiper-image" :src="item.adName"></image>
 						</swiper-item>
 					</swiper>
 				</view>
 			</u-transition>
 		</view>
-		
-		
+
+
 		<view>
 			<u-transition :show="transitionshow" mode="fade-up" duration="500">
 				<view>
@@ -40,31 +40,10 @@
 	export default {
 		data() {
 			return {
-				transitionshow:true,
+				type: '',
+				transitionshow: true,
 				scrollTop: 0,
-				taskList: [{
-						name: '报修记录',
-						src: '../../static/fix/fixapply.png'
-
-					},
-					
-					{
-						name: '统计',
-						src: '../../static/home/statistics.png'
-					},
-					{
-						name: '个人出行记录',
-						src: '../../static/home/record.png'
-					},
-					{
-						name: '门禁申请记录',
-						src: '../../static/home/apply.png'
-					},
-					{
-						name: '人员管理',
-						src: '../../static/home/manage.png'
-					}
-				],
+				taskList: [],
 				current: 0,
 				href: [],
 				image_list: [{
@@ -89,40 +68,95 @@
 
 					case 0:
 						uni.navigateTo({
-							url: '/pages/fixrecord/fixrecord',
+							url: '/pages/qrcode/qrcode',
+							// url: '/pages/scan/scan',
 
 						});
 						break;
 					case 1:
 						uni.navigateTo({
-							url: '/pages/applyrecord/applyrecord',
+
+							url: '/pages/selfrecord/selfrecord',
 
 						});
+						break;
+					case 2:
+
+						if (this.type === 1) {
+							uni.navigateTo({
+								url: '/pages/fixrecord/fixrecord',
+
+							});
+						}
+						if (this.type === 2 || this.type === 0) {
+							uni.navigateTo({
+								url: '/pages/applyrecord/applyrecord',
+
+							});
+						}
+
+
+
 						break;
 					case 3:
 
 						uni.navigateTo({
-							url: '/pages/applyrecord/applyrecord',
-						
+							url: '/pages/fixrecord/fixrecord',
+
 						});
 						break;
 					case 4:
+						uni.navigateTo({
 
+							url: '/pages/allrecord/allrecord',
+						});
 						break;
 					case 5:
-
+						uni.navigateTo({
+							url: '/pages/manage/manage',
+						});
 						break;
 					case 6:
-
+						uni.navigateTo({
+							url: '/pages/ads/ads',
+						});
 						break;
 					default:
+						uni.navigateTo({
+							url: '/pages/scan/scan',
+						});
 
 						break;
 				}
 			},
+			getallimage() {
+				uni.request({
+
+					url: 'http://47.100.242.36:6001/' + 'ad/search',
+					data: {
+
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+
+
+						console.log(res)
+						this.image_list = res.data.datas
+
+
+					},
+					fail: (res) => {
+
+
+					}
+
+				})
+			},
 			refresh() {
-				this.href.splice(this.href.length, 0, "dk")
-				console.log(this.href)
+				uni.reLaunch({
+					url: '/pages/home/home'
+				})
 			}
 		},
 		onPullDownRefresh() {
@@ -131,6 +165,79 @@
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop;
+		},
+		onShow() {
+			let datas = uni.getStorageSync("info")
+			this.getallimage()
+			this.type = datas.userType
+			if (this.type === 0) {
+				this.taskList = [{
+						name: '生成二维码',
+						src: '../../static/home/code.png'
+					},
+					{
+						name: '个人出行记录',
+						src: '../../static/home/record.png'
+					},
+					{
+						name: '门禁申请记录',
+						src: '../../static/home/apply.png'
+					},
+					{
+						name: '报修记录',
+						src: '../../static/fix/fixapply.png'
+
+					},
+
+					{
+						name: '统计',
+						src: '../../static/home/statistics.png'
+					},
+
+
+					{
+						name: '人员管理',
+						src: '../../static/home/manage.png'
+					},
+					{
+						name: '公告管理',
+						src: '../../static/home/ad.png'
+					}
+
+				]
+			}
+			if (this.type === 1) {
+				this.taskList = [{
+						name: '生成二维码',
+						src: '../../static/home/code.png'
+					},
+					{
+						name: '个人出行记录',
+						src: '../../static/home/record.png'
+					},
+
+					{
+						name: '报修记录',
+						src: '../../static/fix/fixapply.png'
+
+					},
+				]
+			}
+			if (this.type === 2) {
+				this.taskList = [{
+						name: '生成二维码',
+						src: '../../static/home/code.png'
+					},
+					{
+						name: '个人出行记录',
+						src: '../../static/home/record.png'
+					},
+					{
+						name: '门禁申请记录',
+						src: '../../static/home/apply.png'
+					},
+				]
+			}
 		}
 
 	}

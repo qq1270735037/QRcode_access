@@ -1,7 +1,7 @@
 <template>
 
 	<view>
-	
+
 		<u-transition :show="transitionshow" mode="fade-left" duration="800">
 			<view>
 				<u-row style="background-color: #ffffff;height: 220upx;">
@@ -19,25 +19,25 @@
 							<view style="margin-top: 30upx;">
 								<text style="font-size: 40upx;margin-left: 20upx;color:#7e7e7e">ID:{{id}}</text>
 							</view>
-			
+
 						</view>
 					</u-col>
 					<u-col span="2">
 						<view @click="detail">
 							<image src="../../static/my/code.png" style="width: 50upx;height: 50upx;margin-left: 20px;">
 							</image>
-			
+
 						</view>
 					</u-col>
 				</u-row>
 			</view>
-		
+
 		</u-transition>
-		
+
 		<u-transition :show="transitionshow" mode="fade-right" duration="800">
 			<view style="padding-top: 30upx;" v-show="flag1">
-				<u-row style="height: 110upx; background-color: #ffffff;margin-top:3upx" v-for="(item, index) in my_list"
-					:index="index" :key="index" @click="select_cell(item.select)">
+				<u-row style="height: 110upx; background-color: #ffffff;margin-top:3upx"
+					v-for="(item, index) in my_list" :index="index" :key="index" @click="select_cell(item.select)">
 					<u-col span="2">
 						<view style="display: flex;">
 							<image :src="item.src" style="height: 40upx;width: 40upx;margin-left: 50upx;"></image>
@@ -50,7 +50,8 @@
 					</u-col>
 					<u-col span="2" style="display: flex;background-color: #ffffff;">
 						<view style="margin:0 auto; display: flex;">
-							<image src="../../static/my/right.png" style="width: 40upx;height: 40upx;margin-left: 20px;">
+							<image src="../../static/my/right.png"
+								style="width: 40upx;height: 40upx;margin-left: 20px;">
 							</image>
 						</view>
 					</u-col>
@@ -62,21 +63,27 @@
 							@confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
 					</uni-popup>
 				</view>
-			
+
 			</view>
-		
+
 		</u-transition>
-		
+
 
 		<tabBar :current="4"></tabBar>
 	</view>
 </template>
 
 <script>
+	
+	import {
+		pathToBase64,
+		base64ToPath
+	} from 'image-tools'
 	export default {
+
 		data() {
 			return {
-				transitionshow:true,
+				transitionshow: true,
 				flag1: true,
 				myImage: "../../static/home/ad3.jpg",
 				name: "高富帅",
@@ -113,13 +120,13 @@
 						url: "pages/userinfo/userinfo"
 					},
 					{
-						url: "pages/userinfo/userinfo"
+						url: "pages/selfrecord/selfrecord"
 					},
 					{
-						url: "pages/userinfo/userinfo"
+						url: "pages/fixrecord/fixrecord"
 					},
 					{
-						url: "pages/userinfo/userinfo"
+						url: "pages/setting/setting"
 					},
 					{
 						url: "pages/login/login"
@@ -143,6 +150,9 @@
 			},
 			detail() {
 
+				uni.navigateTo({
+					url: '/pages/qrcode/qrcode'
+				})
 			},
 
 			select_cell(e) {
@@ -169,31 +179,15 @@
 			dialogClose() {
 				console.log('点击关闭')
 			},
+
 		},
-		onLoad() {
+		onShow() {
 			let datas = uni.getStorageSync("info")
 			this.name = datas.userName
 			this.id = datas.userId
 			console.log(datas.userImage);
-			uni.request({
-				url: 'http://47.100.242.36:6001/user/image',
-				responseType: 'arraybuffer',
-				data: {
-					userImage: datas.userImage
-				},
-				success: (res) => {
-					// console.log(res);
-					let result = res.data;
-					//我们所需要的数据
-					this.myImage = 'data:image/png;base64,' + btoa(new Uint8Array(
-						result).reduce((
-						result, byte) => result + String.fromCharCode(byte), ''));
-					//微信小程序不支持btoa，所以可以用下面这个
-					//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
 
-
-				}
-			})
+			this.myImage = datas.userImage
 
 		}
 	}

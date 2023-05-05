@@ -1,37 +1,84 @@
 <template>
 	<view>
-		<view>
-			<uni-segmented-control :current="select" :values="subsectionlist" style-type="text" active-color="#2a781d"
-				@clickItem="sectionChange" style="border-radius: 50upx;" />
-
+		<!-- 管理员 -->
+		<view v-if="type===0">
+			<view>
+				<uni-segmented-control :current="select" :values="subsectionlist" style-type="text" active-color="#2a781d"
+					@clickItem="sectionChange" style="border-radius: 50upx;" />
+			
+			</view>
+			<view>
+				<u-transition :show="transitionshow" mode="fade-left" duration="800">
+					<view>
+						<uni-card style="border-radius: 30upx;" v-for="(item, index) in fixList" :key="index" :index="index"
+							@click="clickcard(index)">
+			
+							<u-row style="background-color: #ffffff;height: 80upx;">
+								<u-col span="9">
+									<view>
+										<text style="font-size: 35upx; font-weight:600">{{item.userName}}</text>
+									</view>
+								</u-col>
+							</u-row>
+							<u-row style="background-color: #ffffff;height: 30upx;">
+			
+								<u-col>
+									<text
+										style="font-size: 35upx; font-weight:400;  text-align:right; background-color: #ffffff;">报修编号:{{item.fixId}}</text>
+								</u-col>
+							</u-row>
+							
+						</uni-card>
+					</view>
+					<view style="margin-top: 80upx;"></view>
+			
+				</u-transition>
+			</view>
 		</view>
-		<view>
-			<u-transition :show="transitionshow" mode="fade-left" duration="800">
-				<view>
-					<uni-card style="border-radius: 30upx;" v-for="(item, index) in fixList" :key="index" :index="index"
-						@click="clickcard(index)">
-
-						<u-row style="background-color: #ffffff;height: 80upx;">
-							<u-col span="9">
-								<view>
-									<text style="font-size: 35upx; font-weight:600">{{item.userName}}</text>
-								</view>
-							</u-col>
-						</u-row>
-						<u-row style="background-color: #ffffff;height: 30upx;">
-
-							<u-col>
-								<text
-									style="font-size: 35upx; font-weight:400;  text-align:right; background-color: #ffffff;">报修编号:{{item.fixId}}</text>
-							</u-col>
-						</u-row>
-						
-					</uni-card>
-				</view>
-				<view style="margin-top: 80upx;"></view>
-
-			</u-transition>
+		<!-- 业主 -->
+		<view v-if="type===1">
+			<view>
+				<u-transition :show="transitionshow" mode="fade-left" duration="800">
+					<view>
+						<uni-card style="border-radius: 30upx;" v-for="(item, index) in fixList" :key="index" :index="index"
+							@click="clickcard(index)">
+			
+							<u-row style="background-color: #ffffff;height: 80upx;">
+								<u-col span="9">
+									<view>
+										<text style="font-size: 35upx; font-weight:600">{{item.userName}}</text>
+									</view>
+								</u-col>
+							</u-row>
+							<u-row style="background-color: #ffffff;height: 30upx;">
+			
+								<u-col>
+									<text
+										style="font-size: 35upx; font-weight:400;  text-align:right; background-color: #ffffff;">报修编号:{{item.fixId}}</text>
+								</u-col>
+							</u-row>
+							
+						</uni-card>
+					</view>
+					<view style="margin-top: 80upx;"></view>
+			
+				</u-transition>
+			</view>
 		</view>
+		
+		<!-- 游客界面 -->
+		<view  v-if="type===2">
+			<u-empty
+			        mode="permission"
+					width="500"
+					height="500"
+					marginTop="50"
+					textSize="80"
+			        icon="http://cdn.uviewui.com/uview/empty/permission.png"
+			>
+			</u-empty>
+		</view>
+		
 	</view>
 
 </template>
@@ -40,6 +87,7 @@
 	export default {
 		data() {
 			return {
+				type:'',
 				subsectionlist: ['未处理', '已处理'],
 				select: 0,
 				//报修列表
@@ -79,24 +127,7 @@
 
 					}
 				})
-				// uni.request({
-				// 	url: 'http://47.100.242.36:6001/' + 'fix/searchByState',
-				// 	data: {
-				// 		fixState: this.select
-				// 	},
-				// 	method: "POST",
-				// 	dataType: "json",
-				// 	success: (res) => {
-						
-				// 		console.log("success:", res);
-				// 		this.fixList = res.data.datas;
 				
-				// 	},
-				// 	fail: (res) => {
-				
-				
-				// 	}
-				// })
 			},
 			clickcard(index){
 				console.log("index：",index)
@@ -136,29 +167,50 @@
 		},
 		onShow() {
 
-
-
 			let datas = uni.getStorageSync("info")
-
-			//显示报修列表
-			uni.request({
-				url: 'http://47.100.242.36:6001/' + 'fix/searchByState',
-				data: {
-					fixState: this.select
-				},
-				method: "POST",
-				dataType: "json",
-				success: (res) => {
-
-					console.log("success:", res);
-					this.fixList = res.data.datas;
-
-				},
-				fail: (res) => {
-
-
-				}
-			})
+			this.type = datas.userType
+			//显示管理员报修列表
+			if(this.type===0){
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'fix/searchByState',
+					data: {
+						fixState: this.select
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+				
+						console.log("success:", res);
+						this.fixList = res.data.datas;
+				
+					},
+					fail: (res) => {
+				
+				
+					}
+				})
+			}
+			if(this.type===1){
+				uni.request({
+					url: 'http://47.100.242.36:6001/' + 'fix/searchById',
+					data: {
+						userId:datas.userId
+					},
+					method: "POST",
+					dataType: "json",
+					success: (res) => {
+				
+						console.log("success:", res);
+						this.fixList = res.data.datas;
+				
+					},
+					fail: (res) => {
+				
+				
+					}
+				})
+			}
+			
 
 
 

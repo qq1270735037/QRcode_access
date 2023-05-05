@@ -14,7 +14,7 @@
 			<view v-if="show && (clearButton==='always'||clearButton==='auto'&&searchVal!=='') &&!readonly"
 				class="uni-searchbar__box-icon-clear" @click="clear">
 				<slot name="clearIcon">
-					<uni-icons color="#c0c4cc" size="20" type="clear" />
+					<uni-icons color="#c0c4cc" size="22" type="clear" />
 				</slot>
 			</view>
 		</view>
@@ -267,7 +267,7 @@
 
 	.uni-searchbar__box-search-input {
 		flex: 1;
-		font-size: 14px;
+		font-size: 20px;
 		color: #333;
 	}
 
@@ -289,7 +289,7 @@
 	.uni-searchbar__cancel {
 		padding-left: 10px;
 		line-height: $uni-searchbar-height;
-		font-size: 14px;
+		font-size: 17px;
 		color: #333333;
 		/* #ifdef H5 */
 		cursor: pointer;

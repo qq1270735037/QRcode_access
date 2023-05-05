@@ -46,7 +46,7 @@
 				</view>
 
 			</view>
-
+			<!-- 上传头像 -->
 			<view style="background-color: #ffffff;margin-top: 15upx;">
 				<text style="font-size: 35upx;margin-left: 15upx; font-weight:600">上传物品图片:</text>
 				<scroll-view style="padding-top:10px;" scroll-y="true" class="scroll-Y">
@@ -231,6 +231,13 @@
 			</view>
 		</view>
 
+		<!-- 游客界面 -->
+		<view v-if="type===2">
+			<u-empty mode="permission" width="500" height="500" marginTop="50" textSize="80"
+				icon="http://cdn.uviewui.com/uview/empty/permission.png">
+			</u-empty>
+		</view>
+
 
 		<tabBar :current="3"></tabBar>
 	</view>
@@ -341,33 +348,33 @@
 		methods: {
 			reject(id) {
 				this.overlayshow = false
-				this.allimage=[]
-				
+				this.allimage = []
+
 			},
 			agree(id) {
 				this.overlayshow = false
-				this.allimage=[]
+				this.allimage = []
 				uni.request({
-				
+
 					url: 'http://47.100.242.36:6001/' + 'fix',
 					data: {
 						fixId: this.pop.id,
-						fixState:1
+						fixState: 1
 					},
 					method: "PUT",
 					dataType: "json",
 					success: (res) => {
-				
+
 						console.log("fix success:", res);
 						this.refresh()
-						
-						
+
+
 					},
 					fail: (res) => {
-				
-						
+
+
 					}
-				
+
 				})
 			},
 			//管理员端列表图片点击
@@ -377,7 +384,7 @@
 
 				this.open(index)
 				// console.log(this.allimage[index])
-				
+
 			},
 			open(index) {
 
@@ -421,12 +428,13 @@
 					success: (res) => {
 
 						console.log("FixImage:", res.data.datas);
-						
+
 						this.FixImage = res.data.datas
-						
+
 						if (this.FixImage !== null) {
 							for (var i = 0; i < this.FixImage.length; i++) {
-								this.getImage(this.FixImage[i].imagePic)
+								
+								this.allimage.splice(this.allimage.length, 0, this.FixImage[i].imagePic)
 							}
 
 						}
@@ -442,37 +450,37 @@
 				this.overlayshow = true
 
 			},
-			getImage(imagePic) {
-				uni.request({
-					url: 'http://47.100.242.36:6001/' + 'fiximage/getFixImage',
-					responseType: 'arraybuffer',
-					data: {
-						fixImageId: imagePic
-					},
-					success: (res) => {
-						// console.log(res);
-						let result = res.data;
-						//我们所需要的数据
-						let i = 'data:image/png;base64,' + btoa(new Uint8Array(
-							result).reduce((
-							result, byte) => result + String.fromCharCode(byte), ''));
-						base64ToPath(i)
-							.then(path => {
-								console.log("path", path)
-								this.allimage.splice(this.allimage.length, 0, path)
-							})
-							.catch(error => {
-								console.error("error", error)
-							})
-						
-
-						//微信小程序不支持btoa，所以可以用下面这个
-						//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
+			// getImage(imagePic) {
+			// 	uni.request({
+			// 		url: 'http://47.100.242.36:6001/' + 'fiximage/getFixImage',
+			// 		responseType: 'arraybuffer',
+			// 		data: {
+			// 			fixImageId: imagePic
+			// 		},
+			// 		success: (res) => {
+			// 			// console.log(res);
+			// 			let result = res.data;
+			// 			//我们所需要的数据
+			// 			let i = 'data:image/png;base64,' + btoa(new Uint8Array(
+			// 				result).reduce((
+			// 				result, byte) => result + String.fromCharCode(byte), ''));
+			// 			base64ToPath(i)
+			// 				.then(path => {
+			// 					console.log("path", path)
+			// 					this.allimage.splice(this.allimage.length, 0, path)
+			// 				})
+			// 				.catch(error => {
+			// 					console.error("error", error)
+			// 				})
 
 
-					}
-				})
-			},
+			// 			//微信小程序不支持btoa，所以可以用下面这个
+			// 			//this.image_list[index].src = 'data:image/png;base64,'+uni.arrayBufferToBase64(result);
+
+
+			// 		}
+			// 	})
+			// },
 			//用户端页面点击
 			change(e) {
 				let {
@@ -596,7 +604,7 @@
 			},
 			uploadFilePromise(url, id) {
 				return new Promise((resolve, reject) => {
-					let a = uni.uploadFile({
+					const uploadTask = uni.uploadFile({
 						url: 'http://47.100.242.36:6001/fiximage/image/upload', // 仅为示例，非真实的接口地址
 						filePath: url,
 						name: 'file',
@@ -631,6 +639,7 @@
 			this.type = datas.userType
 			if (this.type === 0) {
 				//显示报修列表
+
 				uni.request({
 					url: 'http://47.100.242.36:6001/' + 'fix/search',
 					data: {
@@ -640,7 +649,7 @@
 					dataType: "json",
 					success: (res) => {
 
-						console.log("success:", res);
+						// console.log("success:", res);
 						this.fixList = res.data.datas;
 
 					},
@@ -654,7 +663,7 @@
 
 		},
 		onPullDownRefresh() {
-			
+
 			uni.reLaunch({
 				url: '/pages/fix/fix'
 			})
@@ -663,11 +672,11 @@
 		},
 		//物理返回按钮先返回到首页
 		onBackPress(options) {
-			
+
 			this.overlayshow = false;
-			this.allimage=[]
+			this.allimage = []
 			return true;
-			
+
 		},
 
 	}

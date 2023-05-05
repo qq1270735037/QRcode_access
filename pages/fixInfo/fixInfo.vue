@@ -1,4 +1,5 @@
 <template>
+
 	<view>
 		<scroll-view style="height: 700px;" scroll-y="true" class="scroll-Y">
 			<!-- 名字Name -->
@@ -53,7 +54,8 @@
 				</u-col>
 				<u-col span="8">
 					<view>
-						<text v-if="pop.state===0" style="font-size: 40upx;margin-left: 20upx; color: #d44300;">待处理</text>
+						<text v-if="pop.state===0"
+							style="font-size: 40upx;margin-left: 20upx; color: #d44300;">待处理</text>
 					</view>
 					<view>
 						<text v-if="pop.state===1" style="font-size: 40upx;margin-left: 20upx;  ">已完成</text>
@@ -92,39 +94,40 @@
 				<uni-grid :column="3" :showBorder="false" :highlight="false" style="background-color: #ffffff;">
 					<uni-grid-item class="grid-item" style="width: 180upx; height: 180upx; "
 						v-for="(item,index) in allimage" :key="index">
-						<image :src=item mode="aspectFill" style="height: 180upx;width: 180upx;"
+						<image :src=item.imagePic mode="aspectFill" style="height: 180upx;width: 180upx;"
 							@click="clickImage(index)"></image>
 					</uni-grid-item>
 				</uni-grid>
 				<view style="padding-top: 50upx;"></view>
 			</view>
-			
+
 		</scroll-view>
 		<!-- 按钮 -->
-		<view v-if="pop.state===0" style="flex: auto; ">
+		<view v-if="pop.state===0&&type===0" style="flex: auto; ">
 			<u-row style="background-color: aqua;">
 				<u-col span="4.5">
 
 				</u-col>
 				<u-col>
-					<view style="position: absolute; bottom: 50upx;">
+					<view style="position: absolute; bottom: 5%">
 						<button class="buttonitem" @click="clickdeal()">去处理</button>
 					</view>
 				</u-col>
 
 			</u-row>
 		</view>
-		<view v-if="pop.state===1" style="flex: auto; ">
+		<view v-if="pop.state===1&&type===0" style="flex: auto; ">
 			<u-row style="background-color: aqua;">
 				<u-col span="5">
-		
+
 				</u-col>
 				<u-col>
 					<view style="position: absolute; bottom: 50upx;">
-						<image src="../../static/fix/success.png" mode="aspectFill" style="width: 120upx; height: 120upx;"></image>
+						<image src="../../static/fix/success.png" mode="aspectFill"
+							style="width: 120upx; height: 120upx;"></image>
 					</view>
 				</u-col>
-		
+
 			</u-row>
 		</view>
 
@@ -139,6 +142,7 @@
 	export default {
 		data() {
 			return {
+				type: '',
 				FixImage: [],
 				allimage: [],
 				pop: {
@@ -156,10 +160,30 @@
 				uni.reLaunch({
 					url: '/pages/fix/fix'
 				})
-				
-				
-			},
 
+
+			},
+			clickImage(index) {
+				this.openimage(index)
+			},
+			openimage(index) {
+				let url = [];
+
+				for (var i = 0; i < this.allimage.length; i++) {
+					url.splice(url.length, 0, this.allimage[i].imagePic)
+				}
+				uni.previewImage({
+					//需要预览的图片http链接列表，多张的时候，url直接写在后面
+					urls: url,
+					// 当前显示图片的http链接，默认是第一个
+					current: index,
+					success: function(res) {},
+					fail: function(res) {},
+					complete: function(res) {},
+
+
+				});
+			},
 			getImage(imagePic) {
 				uni.request({
 					url: 'http://47.100.242.36:6001/' + 'fiximage/getFixImage',
@@ -191,9 +215,9 @@
 					}
 				})
 			},
-			getallimage(id){
+			getallimage(id) {
 				uni.request({
-				
+
 					url: 'http://47.100.242.36:6001/' + 'fiximage/getImageList',
 					data: {
 						fixId: id
@@ -201,23 +225,21 @@
 					method: "POST",
 					dataType: "json",
 					success: (res) => {
-				
+
 						console.log("FixImage:", res.data.datas);
-				
+
 						this.FixImage = res.data.datas
-				
+
 						if (this.FixImage !== null) {
-							for (var i = 0; i < this.FixImage.length; i++) {
-								this.getImage(this.FixImage[i].imagePic)
-							}
-				
+							this.allimage = this.FixImage
+
 						}
 					},
 					fail: (res) => {
-				
+
 						this.FixImage = null
 					}
-				
+
 				})
 			}
 		},
@@ -225,15 +247,18 @@
 			if (option) {
 				this.pop = JSON.parse(decodeURIComponent(option.item));
 				// this.pop=option
-				console.log("option",option.item)
-				
+				console.log("option", option.item)
+
 			}
-			
+
 		},
 		onShow() {
-			this.getallimage(this.pop.id)
+			let datas = uni.getStorageSync("info")
+			this.type = datas.userType
+			this.allimage = [],
+				this.getallimage(this.pop.id)
 		}
-		
+
 	}
 </script>
 
@@ -252,10 +277,11 @@
 		background-color: #aaff00;
 		font-size: 40upx;
 	}
-	.grid-item{
+
+	.grid-item {
 		margin-top: 30upx;
 		margin-left: 50upx;
-	
-	
+
+
 	}
 </style>

@@ -9,7 +9,9 @@
 			<image :class="item.class" slot="active-icon" :src="item.src"></image>
 			<image :class="item.class" slot="inactive-icon" :src="item.src2"></image>
 		</u-tabbar-item>
-
+		<view>
+			<u-toast ref="uToast" />
+		</view>
 	</u-tabbar>
 
 
@@ -59,7 +61,7 @@
 						class: "image_item",
 						src2: "../../static/tabbar/fix.png",
 						src: "../../static/tabbar/fix-fill.png",
-						
+
 						text: '报修',
 						customIcon: false,
 						pagePath: "pages/fix/fix"
@@ -90,20 +92,65 @@
 			click1(e) {
 				console.log('click1', e);
 			},
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
+
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				})
+			},
 			change1(name) {
 
 				console.log("name:", name)
-				if(name!==2){
+				if (name !== 2) {
 					uni.reLaunch({
 						url: '/' + this.list[name].pagePath,
 					})
-				}
-				else{
+				} else {
+					let that = this
 					uni.scanCode({
-						success: function (res) {
-							
-							console.log('条码类型：' + res.scanType);
+						onlyFromCamera: true,
+						success: function(res) {
+							let datas = uni.getStorageSync("info")
+							console.log('时间：' + uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss'));
 							console.log('条码内容：' + res.result);
+							if (res.result === "e479401727f9c41586af596c714a5632") {
+								uni.request({
+									url: 'http://47.100.242.36:6001/' + 'qrcode/request',
+									name: 'requestbody',
+									data: {
+										verify: datas,
+										time: uni.$u.timeFormat(Date.now(), 'yyyy-mm-dd hh:MM:ss')
+									},
+									method: "POST",
+									dataType: "json",
+									success: (res) => {
+										let result = res.data.code
+										console.log("success:", res);
+										if (result === 200) {
+											console.log("验证成功")
+											that.showToast("验证成功，门已开", 'success')
+
+										}
+										if (result === 100) {
+											that.showToast("验证失败", 'success')
+											console.log("验证失败")
+										}
+										if (result === 108) {
+											that.showToast("无权限", 'error')
+
+										}
+
+
+									},
+									fail: (res) => {
+										console.log(res);
+
+										that.showToast("网络错误", 'error')
+									}
+								});
+							}
 						}
 					});
 				}

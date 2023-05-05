@@ -76,7 +76,7 @@
 	export default {
 		data() {
 			return {
-				userType:'',
+				userType:'2',
 				userId: '',
 				userPassword: '',
 				pwd2: '',
@@ -213,7 +213,10 @@
 
 							}, 2000);
 						}
-						
+						if (result === 108) {
+							this.showToast("账号异常", 'error')
+							
+						}
 
 
 					},
