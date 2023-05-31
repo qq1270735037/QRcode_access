@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u--input v-model="phone" type="number" class="inputview" placeholder="请输入联系方式" border="bottom" clearable
+		<u--input v-model="phone" type="number" class="inputview" maxlength="11" placeholder="请输入联系方式" border="bottom" clearable
 			fontSize="40upx"></u--input>
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>
@@ -37,7 +37,7 @@
 				})
 			},
 			submit() {
-					if (this.phone) {
+					if (this.phone.length===11) {
 						let datas = uni.getStorageSync("info")
 				
 						uni.request({
@@ -78,6 +78,9 @@
 						})
 				
 				
+					}
+					else{
+						this.showToast("请输入正确的联系方式", 'error')
 					}
 				
 			},

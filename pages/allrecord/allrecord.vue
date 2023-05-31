@@ -25,7 +25,7 @@
 								<!-- 头像 -->
 								<view>
 									<u-avatar :src="item.userImage" shape="circle" size="50px" mode="aspectFill"
-										default-url="../../static/home/ad1.jpg" @click="open"></u-avatar>
+										default-url="../../static/home/ad1.jpg"></u-avatar>
 								</view>
 							</u-col>
 							<u-col span="10">
@@ -53,7 +53,9 @@
 
 			</u-transition>
 		</view>
-
+		<view>
+			<u-toast ref="uToast" />
+		</view>
 
 	</view>
 </template>
@@ -96,7 +98,7 @@
 			// 执行搜索
 			doSearch(searchQuery) {
 				console.log('searchQuery', searchQuery);
-				if(searchQuery.selectIndex===2){
+				if (searchQuery.selectIndex === 2) {
 					this.getseven()
 				}
 				if (searchQuery.keyword) {
@@ -110,38 +112,57 @@
 							this.searchByName(searchQuery.keyword)
 							break;
 
-						
+
 
 						default:
 
 							break;
 					}
 				}
+				else{
+					if (searchQuery.selectIndex !== 2){
+						this.showToast("请输入内容", 'error')
+					}
+					
+				}
 
 			},
 			searchById(message) {
 				//通过Id
-				uni.request({
-					url: 'http://47.100.242.36:6001/' + 'record/searchAllById',
-					data: {
-						recordUserId: message
-					},
-					method: "POST",
-					dataType: "json",
-					success: async (res) => {
-						console.log("searchByName:", res);
-						if (res.data.code === 200) {
-							this.selfList = res.data.datas
+				if (!isNaN(parseFloat(message)) && isFinite(message)) {
+					uni.request({
+						url: 'http://47.100.242.36:6001/' + 'record/searchAllById',
+						data: {
+							recordUserId: message
+						},
+						method: "POST",
+						dataType: "json",
+						success: async (res) => {
+							console.log("searchByName:", res);
+							if (res.data.code === 200) {
+								this.selfList = res.data.datas
+
+							}
+
+						},
+						fail: (res) => {
+
+							this.showToast("网络出错", 'error')
+
 
 						}
+					})
+				} else {
+					this.showToast("请输入正确ID", 'error')
+				}
 
-					},
-					fail: (res) => {
+			},
+			showToast(Msg, Type) {
+				this.$refs.uToast.show({
+					message: Msg,
+					type: Type,
 
-						this.showToast("网络出错", 'error')
-
-
-					}
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
 				})
 			},
 			searchByName(message) {

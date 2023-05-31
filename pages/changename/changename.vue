@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u--input v-model="nickname" class="inputview" placeholder="请输入名字" border="bottom" clearable
+		<u--input v-model="nickname" class="inputview" placeholder="请输入名字"  maxlength="8" border="bottom" clearable
 			fontSize="40upx"></u--input>
 		<view>
 			<button class="submit-btn" @click="submit">确认</button>

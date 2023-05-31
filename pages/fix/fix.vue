@@ -593,7 +593,7 @@
 
 
 				} else {
-					this.showToast("请选择物品类型和联系方式", 'error')
+					this.showToast("请选择物品类型", 'error')
 				}
 
 			},

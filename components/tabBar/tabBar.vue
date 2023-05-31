@@ -151,6 +151,9 @@
 									}
 								});
 							}
+							else{
+								that.showToast("请扫描正确的门禁二维码", 'error')
+							}
 						}
 					});
 				}

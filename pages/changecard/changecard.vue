@@ -34,7 +34,7 @@
 				})
 			},
 			submit() {
-					if (this.cardid) {
+					if (this.cardid.length===18) {
 						let datas = uni.getStorageSync("info")
 				
 						uni.request({
@@ -75,6 +75,9 @@
 						})
 				
 				
+					}
+					else{
+						this.showToast("请输入正确身份证", 'error')
 					}
 				
 			},
